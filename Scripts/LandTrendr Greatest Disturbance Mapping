@@ -1,16 +1,5 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var aoi = 
-    /* color: #d63000 */
-    /* displayProperties: [
-      {
-        "type": "rectangle"
-      }
-    ] */
-    ee.Geometry.Polygon(
-        [[[-122.85852704228836, 43.79675214190582],
-          [-122.85852704228836, 43.72037786243767],
-          [-122.74248395146805, 43.72037786243767],
-          [-122.74248395146805, 43.79675214190582]]], null, false);
+var table = ee.FeatureCollection("users/ianeddy/b_Car_ranges_2012_alb");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 //######################################################################################################## 
 //#                                                                                                    #\\
