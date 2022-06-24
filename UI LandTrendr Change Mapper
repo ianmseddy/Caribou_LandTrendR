@@ -12,7 +12,7 @@
 // website: https://github.com/eMapR/LT-GEE
 
 
-
+//#### this is how you make comments####
 
 
 var ltgee = require('users/emaprlab/public:Modules/LandTrendr.js');  
