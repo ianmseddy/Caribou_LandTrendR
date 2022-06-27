@@ -1,5 +1,6 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var table = ee.FeatureCollection("users/ianeddy/b_Car_ranges_2012_alb");
+var table = ee.FeatureCollection("users/ianeddy/b_Car_ranges_2012_alb"),
+    aoi = ee.FeatureCollection("users/ianeddy/BER_ON2");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 //######################################################################################################## 
 //#                                                                                                    #\\
@@ -27,6 +28,7 @@ var table = ee.FeatureCollection("users/ianeddy/b_Car_ranges_2012_alb");
 //##########################################################################################
 
 // define collection parameters
+
 var startYear = 1984;
 var endYear = 2019;
 var startDay = '06-20';
@@ -64,7 +66,8 @@ var changeParams = {
 //##########################################################################################
 
 // load the LandTrendr.js module
-var ltgee = require('users/emaprlab/public:Modules/LandTrendr.js'); 
+//var ltgee = require('users/emaprlab/public:Modules/LandTrendr.js'); 
+var ltgee = require('users/ianeddy/Caribou_LandTrendr:Modules/LandTrendr.js'); 
 
 // add index to changeParams object
 changeParams.index = index;
