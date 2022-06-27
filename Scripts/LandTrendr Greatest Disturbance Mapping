@@ -1,6 +1,5 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var aoi = ee.FeatureCollection("users/ianeddy/BER_ON2"),
-    imageVisParam = {"opacity":1,"bands":["yod"],"min":1984,"max":2019,"palette":["9400d3","4b0082","0000ff","00ff00","ffff00","ff7f00","ff0000"]};
+var aoi = ee.FeatureCollection("users/ianeddy/BER_ON2");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 //######################################################################################################## 
 //#                                                                                                    #\\
@@ -22,6 +21,10 @@ var aoi = ee.FeatureCollection("users/ianeddy/BER_ON2"),
 //   - use this app to help parameterize: 
 //     https://emaprlab.users.earthengine.app/view/lt-gee-change-mapper
 
+
+//Ian added
+//isolate each individual range from Caribou range poly
+//make some kidn of for loop to  run land_trenr and export the results with a unique filename
 
 //##########################################################################################
 // START INPUTS
@@ -66,8 +69,8 @@ var changeParams = {
 //##########################################################################################
 
 // load the LandTrendr.js module
-var ltgee = require('users/emaprlab/public:Modules/LandTrendr.js'); 
-//var ltgee = require('users/ianeddy/Caribou_LandTrendr:Modules/LandTrendr.js'); 
+// var ltgee = require('users/emaprlab/public:Modules/LandTrendr.js'); 
+var ltgee = require('users/ianeddy/Caribou_LandTrendr:Modules/LandTrendr.js'); 
 
 // add index to changeParams object
 changeParams.index = index;
@@ -103,6 +106,8 @@ var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
 
 
 var exportImg = changeImg.clip(aoi).unmask(0).short();
+//var exportImg = changeImg.yod;
+
 /*
 Export.image.toDrive({
   image: exportImg, 
@@ -121,6 +126,10 @@ Export.image.toDrive({
   folder: 'CaribouResults',
   fileNamePrefix: 'BER_ON2_Change_1984_2019',
   maxPixels: 1e13,
+  scale: 30,
+  crs: 'EPSG:5070',
   region: aoi
 });
 
+
+print(exportImg);
