@@ -1,6 +1,5 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var table = ee.FeatureCollection("users/ianeddy/b_Car_ranges_2012_alb"),
-    aoi = ee.FeatureCollection("users/ianeddy/BER_ON2");
+var aoi = ee.FeatureCollection("users/ianeddy/BER_ON2");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 //######################################################################################################## 
 //#                                                                                                    #\\
