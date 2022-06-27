@@ -98,12 +98,12 @@ Map.addLayer(changeImg.select(['yod']), yodVizParms, 'Year of Detection');
 
 
 // export change data to google drive
-
+var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
 var exportImg = changeImg.clip(aoi).unmask(0).short();
 Export.image.toDrive({
   image: exportImg, 
   description: 'lt-gee_disturbance_map', 
-  folder: 'lt-gee_disturbance_map_test', 
+  folder: gdriveFolder, 
   fileNamePrefix: 'lt-gee_disturbance_map', 
   region: aoi, 
   scale: 30, 
