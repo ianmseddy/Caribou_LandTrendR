@@ -1,5 +1,6 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var aoi = ee.FeatureCollection("users/ianeddy/BER_ON2");
+var aoi = ee.FeatureCollection("users/ianeddy/BER_ON2"),
+    imageVisParam = {"opacity":1,"bands":["yod"],"min":1984,"max":2019,"palette":["9400d3","4b0082","0000ff","00ff00","ffff00","ff7f00","ff0000"]};
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 //######################################################################################################## 
 //#                                                                                                    #\\
@@ -65,8 +66,8 @@ var changeParams = {
 //##########################################################################################
 
 // load the LandTrendr.js module
-//var ltgee = require('users/emaprlab/public:Modules/LandTrendr.js'); 
-var ltgee = require('users/ianeddy/Caribou_LandTrendr:Modules/LandTrendr.js'); 
+var ltgee = require('users/emaprlab/public:Modules/LandTrendr.js'); 
+//var ltgee = require('users/ianeddy/Caribou_LandTrendr:Modules/LandTrendr.js'); 
 
 // add index to changeParams object
 changeParams.index = index;
@@ -99,7 +100,10 @@ Map.addLayer(changeImg.select(['yod']), yodVizParms, 'Year of Detection');
 
 // export change data to google drive
 var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
+
+
 var exportImg = changeImg.clip(aoi).unmask(0).short();
+/*
 Export.image.toDrive({
   image: exportImg, 
   description: 'lt-gee_disturbance_map', 
@@ -110,3 +114,13 @@ Export.image.toDrive({
   crs: 'EPSG:5070', 
   maxPixels: 1e13
 });
+*/
+
+Export.image.toDrive({
+  image: exportImg,
+  folder: 'CaribouResults',
+  fileNamePrefix: 'BER_ON2_Change_1984_2019',
+  maxPixels: 1e13,
+  region: aoi
+});
+
