@@ -1,1 +1,28 @@
-var aoi users/ianeddy/
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var table = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digitized_Caribou_StudyAreas");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+//working code
+//print("Count before filter:", table.size())
+//function getCols(table){ 
+//  print(table.columns);
+//}
+//table.limit(0).evaluate(getCols);
+
+//turn this filter into a function that will filter by docID - or is this relevant.. do we just need the geographic area to avoid double counting. 
+var NewFilt = ee.Filter.inList("Pub_Year", [2005, 2010, 2012]);
+var FilteredData = table.filter(NewFilt);
+
+print(FilteredData.size())
+
+
+
+//var firstFilter = table.filter(ee.Filter.gt('Publication Year', 2005))
+//print("Count after first filter:", firstFilter.size())
+ function laterThan2010(year) {
+   return year > 2010
+ }
+//var newTable = table.filter(ee.Filter.eq("Pub_Year", 2005))
+
+
+
+//var firstFilter = table.filter('Pub_Year', 2005); #doesnt' work
