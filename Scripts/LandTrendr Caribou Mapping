@@ -84,20 +84,21 @@ var changeParams = {
 // load the LandTrendr.js module
 // var ltgee = require('users/emaprlab/public:Modules/LandTrendr.js'); 
 var ltgee = require('users/ianeddy/Caribou_LandTrendr:Modules/LandTrendr.js'); 
-var index = 'NBR';
+var Index = 'NBR';
 var maskThese = ['cloud', 'shadow', 'snow', 'water'];
 
 //Define change function
-var changeFunc = function(aoi, index, maskThese, startY, endY, runParams, DocID) {
+var changeFunc = function(aoi, Index, maskThese, runParams, DocID) {
 var startY = ee.String(aoi.get("MeasureYear"));
 var endY = 2020;
 
 
+
 // add index to changeParams object
-changeParams.index = index;
+changeParams.index = Index;
 
 // run landtrendr
-var lt = ltgee.runLT(startYear = startY, endYear = endY, startDay = startDay, endDay = endDay, aoi, index = index, [], runParams, maskThese);
+var lt = ltgee.runLT(startYear = startY, endYear = endY, startDay = startDay, endDay = endDay, aoi, index = Index, runParams, maskThese);
 
 // get the change map layers
 var changeImg = ltgee.getChangeMap(lt, changeParams);
