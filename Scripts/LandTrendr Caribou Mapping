@@ -27,7 +27,7 @@ var aoi = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digiti
 //first, isolate by province - then Map by DocID - because some polygons were measured in different years.
 // it may not matter whether the polygon was disturbed after - since so few are disturbed twice. 
 
-var ProvinceFilt = ee.Filter.inList("Province", ["Alberta"]);
+var ProvinceFilt = ee.Filter.inList("Province", ["SK"]);
 var aoi = aoi.filter(ProvinceFilt);
 // filter using a function - we will use this with the map function to run LandTrendr for each study 
 function filterByDocID(DocID){
