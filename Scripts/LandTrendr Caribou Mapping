@@ -1,5 +1,5 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var aoi = ee.FeatureCollection("users/ianeddy/BER_ON2");
+var aoi = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digitized_Caribou_StudyAreas");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 //######################################################################################################## 
 //#                                                                                                    #\\
@@ -24,6 +24,21 @@ var aoi = ee.FeatureCollection("users/ianeddy/BER_ON2");
 
 //Ian added
 //isolate each individual range from Caribou range poly
+//first, isolate by province - then Map by DocID - because some polygons were measured in different years.
+// it may not matter whether the polygon was disturbed after - since so few are disturbed twice. 
+
+var ProvinceFilt = ee.Filter.inList("Province", ["Alberta"]);
+var ProvinceAOI = aoi.filter(ProvinceFilt);
+// filter using a function - we will use this with the map function to run LandTrendr for each study 
+function filterByDocID(DocID){
+  return(ee.Filter.inList("DocID", DocID))
+}
+//91 is used as an example here - the arg will come from map
+//var NewFilt2  = aoi.filter(filterByDocID([91]));
+//print(NewFilt2.size())
+//Map.addLayer(NewFilt2, {color:'green'}, 'NewFilt2')
+
+
 //make some kidn of for loop to  run land_trenr and export the results with a unique filename
 
 //##########################################################################################
@@ -31,14 +46,19 @@ var aoi = ee.FeatureCollection("users/ianeddy/BER_ON2");
 //##########################################################################################
 
 // define collection parameters
-
+//1984 will always be the start year
 var startYear = 1984;
+//end year will come from publication?
 var endYear = 2019;
+//is startDay relevant
 var startDay = '06-20';
 var endDay = '09-01';
 //var aoi = ee.Geometry.Point(-122.8848, 43.7929);
 var index = 'NBR';
 var maskThese = ['cloud', 'shadow', 'snow', 'water'];
+
+//var outputName = paste(DocID, startYear, endYear))? #or author?
+
 
 // define landtrendr parameters
 var runParams = { 
