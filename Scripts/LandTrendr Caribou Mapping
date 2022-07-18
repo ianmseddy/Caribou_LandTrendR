@@ -28,7 +28,7 @@ var aoi = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digiti
 // it may not matter whether the polygon was disturbed after - since so few are disturbed twice. 
 
 var ProvinceFilt = ee.Filter.inList("Province", ["Alberta"]);
-var ProvinceAOI = aoi.filter(ProvinceFilt);
+var aoi = aoi.filter(ProvinceFilt);
 // filter using a function - we will use this with the map function to run LandTrendr for each study 
 function filterByDocID(DocID){
   return(ee.Filter.inList("DocID", DocID))
@@ -38,8 +38,6 @@ function filterByDocID(DocID){
 //print(NewFilt2.size())
 //Map.addLayer(NewFilt2, {color:'green'}, 'NewFilt2')
 
-
-//make some kidn of for loop to  run land_trenr and export the results with a unique filename
 
 //##########################################################################################
 // START INPUTS
