@@ -86,18 +86,11 @@ var changeParams = {
 var ltgee = require('users/ianeddy/Caribou_LandTrendr:Modules/LandTrendr.js'); 
 var index = 'NBR';
 var maskThese = ['cloud', 'shadow', 'snow', 'water'];
-
-//Define change function
-var changeFunc = function(aoi, Index, maskThese, runParams, DocID) {
-
 changeParams.index = index;
 
 
-// add index to changeParams object
-
-
 // run landtrendr
-var lt = ltgee.runLT(startYear = startY, endYear = endY, startDay = startDay, endDay = endDay, aoi, runParams = changeParams, maskThese);
+var lt = ltgee.runLT(startYear = startYear, endYear, startDay, endDay, aoi, runParams = changeParams, maskThese);
 
 // get the change map layers
 var changeImg = ltgee.getChangeMap(lt, changeParams);
@@ -145,7 +138,7 @@ Export.image.toDrive({
 Export.image.toDrive({
   image: exportImg,
   folder: 'CaribouResults',
-  fileNamePrefix: 'BER_ON2_Change_1984_2019',
+  fileNamePrefix: outputFilename,
   maxPixels: 1e13,
   scale: 30,
   crs: 'EPSG:5070',
@@ -154,6 +147,3 @@ Export.image.toDrive({
 
 
 print(exportImg);
-
-};
-var output = aoi.map(changeFunc)
