@@ -55,7 +55,7 @@ var endDay = '09-01';
 var index = 'NBR';
 var maskThese = ['cloud', 'shadow', 'snow', 'water'];
 
-//var outputName = paste(DocID, startYear, endYear))? #or author?
+//var outputName = ee.String(DocID).cat("_", startYear, "_",endYear))
 
 
 // define landtrendr parameters
