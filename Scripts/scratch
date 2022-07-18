@@ -13,14 +13,21 @@ function getCols(aoi){
 var provincialFilt = ee.Filter.inList("Province", ["SK", "MB"]);
 var FilteredAOI = aoi.filter(provincialFilt);
 // filter using a function - we will use this with the map function to run LandTrendr for each study 
-function filterByDocID(DocID){
-  return(ee.Filter.inList("DocID", DocID))
-}
+//function filterByDocID(DocID){
+//  return(ee.Filter.inList("DocID", DocID))
+//}
 //91 is used as an example here - the arg will come from map
-//var NewFilt2  = aoi.filter(filterByDocID([91]));
+//var NewFilt2  = FilteredAOI.filter(filterBy));
 //print(NewFilt2.size())
 FilteredAOI.evaluate(getCols);
-print(FilteredAOI.DocID);
+var Province = FilteredAOI.select("Province");
+print(Province.first());
+
+
+/*var singleProp = fc.select('fuel1');
+print('Single property selected',
+      singleProp.first());
+*/
 //Map.addLayer(NewFilt2, {color:'green'}, 'NewFilt2')
 
 //print(FilteredData.size())
