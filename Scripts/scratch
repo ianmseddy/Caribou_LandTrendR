@@ -1,26 +1,27 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var table = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digitized_Caribou_StudyAreas");
+var aoi = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digitized_Caribou_StudyAreas");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 //working code #####
 //print("Count before filter:", table.size())
-function getCols(table){ 
-  print(table.columns);
+function getCols(aoi){ 
+  print(aoi.columns);
 }
-//table.limit(0).evaluate(getCols);
+
 
 //turn this filter into a function that will filter by docID - or is this relevant.. do we just need the geographic area to avoid double counting. 
 
-var NewFilt = ee.Filter.inList("Pub_Year", [2005, 2010, 2012]);
-var FilteredData = table.filter(NewFilt);
+var provincialFilt = ee.Filter.inList("Province", ["SK", "MB"]);
+var FilteredAOI = aoi.filter(provincialFilt);
 // filter using a function - we will use this with the map function to run LandTrendr for each study 
 function filterByDocID(DocID){
   return(ee.Filter.inList("DocID", DocID))
 }
 //91 is used as an example here - the arg will come from map
-var NewFilt2  = table.filter(filterByDocID([91]));
-print(NewFilt2.size())
-
-Map.addLayer(NewFilt2, {color:'green'}, 'NewFilt2')
+//var NewFilt2  = aoi.filter(filterByDocID([91]));
+//print(NewFilt2.size())
+FilteredAOI.evaluate(getCols);
+print(FilteredAOI.DocID);
+//Map.addLayer(NewFilt2, {color:'green'}, 'NewFilt2')
 
 //print(FilteredData.size())
 
