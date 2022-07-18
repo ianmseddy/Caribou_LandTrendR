@@ -90,7 +90,7 @@ changeParams.index = index;
 
 
 // run landtrendr
-var lt = ltgee.runLT(startYear = startYear, endYear, startDay, endDay, aoi, runParams = changeParams, maskThese);
+var lt = ltgee.runLT(startYear = startYear, endYear, startDay, endDay, aoi, index, [], changeParams, maskThese);
 
 // get the change map layers
 var changeImg = ltgee.getChangeMap(lt, changeParams);
