@@ -20,9 +20,13 @@ var FilteredAOI = aoi.filter(provincialFilt);
 //var NewFilt2  = FilteredAOI.filter(filterBy));
 //print(NewFilt2.size())
 FilteredAOI.evaluate(getCols);
-var Province = FilteredAOI.select("Province");
-print(Province.first());
+//print(FilteredAOI.propertyNames());
+var Province = FilteredAOI.get("Province");
+print(Province);
 
+//print(ee.String(FilteredAOI.get("Province")));
+
+//ee.String(fc.get('provider'))
 
 /*var singleProp = fc.select('fuel1');
 print('Single property selected',
