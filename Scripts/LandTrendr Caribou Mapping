@@ -27,6 +27,21 @@ var aoi = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digiti
 //first, isolate by province - then Map by DocID - because some polygons were measured in different years.
 // it may not matter whether the polygon was disturbed after - since so few are disturbed twice. 
 
+function getCols(tableMetadata) {
+  print(tableMetadata.columns);
+}
+
+// Fetch collection metadata (`.limit(0)`) and apply the
+// previously defined function using `evaluate()`. The printed object is a
+// dictionary where keys are column names and values are datatypes.
+var aoiClient = aoi.getInfo();
+
+
+var startYear = 1984;
+var endYear = aoiClient.features[0].properties.Meas_Years;
+
+print(filename);
+
 var ProvinceFilt = ee.Filter.inList("Province", ["SK"]);
 var aoiSmall = aoi.filter(ProvinceFilt);
 var DocID = aoi.first();
@@ -60,10 +75,6 @@ var endYear = 2020;
 //is startDay relevant
 var startDay = '06-20';
 var endDay = '09-01';
-
-//var DocID = figure out how to get Doc ID
-
-var outputName = ee.String(DocID).cat("_", startYear, "_",endYear)
 
 
 
@@ -136,6 +147,10 @@ var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
 var exportImg = changeImg.clip(aoi).unmask(0).short();
 //var exportImg = changeImg.yod;
 
+var PolygonID = aoi.features[0].properties.PolygonID;
+var filename = PolygonID.concat("_", startYear, "-", endYear);
+
+
 
 Export.image.toDrive({
   image: exportImg, 
@@ -152,7 +167,7 @@ Export.image.toDrive({
 Export.image.toDrive({
   image: exportImg,
   folder: 'CaribouResults',
-  fileNamePrefix: outputFilename,
+  fileNamePrefix: filename,
   maxPixels: 1e13,
   scale: 30,
   crs: 'EPSG:5070',
