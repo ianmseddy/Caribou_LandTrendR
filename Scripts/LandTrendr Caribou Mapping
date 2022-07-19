@@ -50,6 +50,9 @@ function getMetadata(tableMetadata){
 aoiSmall.limit(0).evaluate(getMetadata);
 
 Map.addLayer(aoiSmall, {color:'red'}, "AOI");
+var ID = aoiClient.features[0].properties.PolygonID;
+print(ID);
+
 /*
 //var onlyMcLoughlin = aoiSmall.filter(ee.Filter.inList("DocID", [86]));
 //print(onlyMcLoughlin);
@@ -67,10 +70,16 @@ var runFunction = function(polygon){
   //1984 will always be the start year due to Landsat image availability
   var startYear = 1984;
   //end year will come from publication?
-  var endYear = polygon.features[0].properties.Meas_Years;
+  
   //is startDay relevant
   var startDay = '06-20';
   var endDay = '09-01';
+
+  //retrive metadata from polygon
+  var aoiInfo = polygon.getInfo();
+  var PolygonID = aoiInfo.features[0].properties.PolygonID;
+  var endYear = aoiInfo.features[0].properties.Meas_Years;
+  var filename = PolygonID.concat("_", startYear, "-", endYear);
 
 
 
@@ -139,12 +148,12 @@ var runFunction = function(polygon){
   // export change data to google drive
   var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
   
+
   
   var exportImg = changeImg.clip(polygon).unmask(0).short();
   //var exportImg = changeImg.yod;
   
-  var PolygonID = polygon.features[0].properties.PolygonID;
-  var filename = PolygonID.concat("_", startYear, "-", endYear);
+
   
   //Export the image
   
