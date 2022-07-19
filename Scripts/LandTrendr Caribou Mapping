@@ -34,26 +34,31 @@ function getCols(tableMetadata) {
 // Fetch collection metadata (`.limit(0)`) and apply the
 // previously defined function using `evaluate()`. The printed object is a
 // dictionary where keys are column names and values are datatypes.
-var aoiClient = aoi.getInfo();
+
 
 
 var startYear = 1984;
 
 //for demos
-var PolyFilt = ee.Filter.inList("PolygonID", ["Wittmer15_ColumbiaNorth", "Wittmer15_ColumbiaSouth"]);
+var PolyFilt = ee.Filter.inList("PolygonID", ["Wittmer15_ColumbiaSouth", "Wittmer15_ColumbiaNorth"]);
 var aoiSmall = aoi.filter(PolyFilt);
+
 // filter using a function - we will use this with the map function to run LandTrendr for each study 
-function getMetadata(tableMetadata){
-  print(tableMetadata.columns);
-}
 
-aoiSmall.limit(0).evaluate(getMetadata);
 
-Map.addLayer(aoiSmall, {color:'red'}, "AOI");
-var ID = aoiClient.features[0].properties.PolygonID;
-print(ID);
+
+//Map.addLayer(aoiSmall, {color:'red'}, "AOI");
+
 
 /*
+function getMetadata(tableMetadata){
+`  print(tableMetadata.columns);
+}
+aoiSmall.limit(0).evaluate(getMetadata);
+*/
+
+
+
 //var onlyMcLoughlin = aoiSmall.filter(ee.Filter.inList("DocID", [86]));
 //print(onlyMcLoughlin);
 //print(NewFilt2.size())
@@ -76,11 +81,7 @@ var runFunction = function(polygon){
   var endDay = '09-01';
 
   //retrive metadata from polygon
-  var aoiInfo = polygon.getInfo();
-  var PolygonID = aoiInfo.features[0].properties.PolygonID;
-  var endYear = aoiInfo.features[0].properties.Meas_Years;
-  var filename = PolygonID.concat("_", startYear, "-", endYear);
-
+  var endYear = 2020;
 
 
   // define landtrendr parameters
@@ -153,8 +154,9 @@ var runFunction = function(polygon){
   var exportImg = changeImg.clip(polygon).unmask(0).short();
   //var exportImg = changeImg.yod;
   
+  return(exportImg)
 
-  
+}; 
   //Export the image
   
   //Export.image.toDrive({
@@ -167,8 +169,8 @@ var runFunction = function(polygon){
   //  crs: 'EPSG:5070', 
   //  maxPixels: 1e13
   //});
-   
-  Export.image.toDrive({
+var exportImg = map(runFunction);
+Export.image.toDrive({
     image: exportImg,
     folder: 'CaribouResults',
     fileNamePrefix: filename,
@@ -176,13 +178,14 @@ var runFunction = function(polygon){
     scale: 30,
     crs: 'EPSG:5070',
     region: polygon
-  });
+});
   
-  print(exportImg);
+print(exportImg);
 
-};
+
+
+
 
 
 //Map.runFunction(DocIDs, aoi)
 
-*/
