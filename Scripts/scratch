@@ -47,3 +47,8 @@ print('Single property selected',
 
 
 //var firstFilter = table.filter('Pub_Year', 2005); #doesnt' work
+
+var onlyMcLoughlin = table.filter(ee.Filter.inList("DocID", [86]));
+print(onlyMcLoughlin);
+//print(NewFilt2.size())
+Map.addLayer(onlyMcLoughlin, {color:'green'}, "OnlyMcLoughlin")
