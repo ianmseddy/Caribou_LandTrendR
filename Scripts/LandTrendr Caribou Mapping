@@ -70,7 +70,7 @@ aoiSmall.limit(0).evaluate(getMetadata);
 // START INPUTS
 //##########################################################################################
 
-var runFunction = function(polygon){
+var exportImg = aoiSmall.map(function(polygon){
   // define collection parameters
   //1984 will always be the start year due to Landsat image availability
   var startYear = 1984;
@@ -156,7 +156,7 @@ var runFunction = function(polygon){
   
   return(exportImg)
 
-}; 
+}); 
   //Export the image
   
   //Export.image.toDrive({
@@ -169,15 +169,15 @@ var runFunction = function(polygon){
   //  crs: 'EPSG:5070', 
   //  maxPixels: 1e13
   //});
-var exportImg = map(runFunction);
+
 Export.image.toDrive({
     image: exportImg,
     folder: 'CaribouResults',
-    fileNamePrefix: filename,
+    fileNamePrefix: "caribouTest",
     maxPixels: 1e13,
     scale: 30,
     crs: 'EPSG:5070',
-    region: polygon
+    region: aoiSmall
 });
   
 print(exportImg);
