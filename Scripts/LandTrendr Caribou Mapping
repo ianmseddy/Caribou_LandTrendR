@@ -28,18 +28,31 @@ var aoi = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digiti
 // it may not matter whether the polygon was disturbed after - since so few are disturbed twice. 
 
 var ProvinceFilt = ee.Filter.inList("Province", ["SK"]);
-var aoi = aoi.filter(ProvinceFilt);
+var aoiSmall = aoi.filter(ProvinceFilt);
+var DocID = aoi.first();
 // filter using a function - we will use this with the map function to run LandTrendr for each study 
+function getMetadata(tableMetadata){
+  print(tableMetadata.columns);
+}
+var DocID = 86;
 
+//aoi.limit(0).evaluate(getMetadata);
+
+
+var onlyMcLoughlin = aoiSmall.filter(ee.Filter.inList("DocID", [86]));
+print(onlyMcLoughlin);
 //print(NewFilt2.size())
-//Map.addLayer(NewFilt2, {color:'green'}, 'NewFilt2')
+Map.addLayer(onlyMcLoughlin, {color:'green'}, "OnlyMcLoughlin")
 
+//Start comment
+/*
 
 //##########################################################################################
 // START INPUTS
 //##########################################################################################
 
-// define collection parameters
+def runFunction(DocID, aoi){
+  // define collection parameters
 //1984 will always be the start year
 var startYear = 1984;
 //end year will come from publication?
@@ -47,10 +60,11 @@ var endYear = 2020;
 //is startDay relevant
 var startDay = '06-20';
 var endDay = '09-01';
-//var aoi = ee.Geometry.Point(-122.8848, 43.7929);
 
+//var DocID = figure out how to get Doc ID
 
-//var outputName = ee.String(DocID).cat("_", startYear, "_",endYear))
+var outputName = ee.String(DocID).cat("_", startYear, "_",endYear)
+
 
 
 // define landtrendr parameters
@@ -90,7 +104,7 @@ changeParams.index = index;
 
 
 // run landtrendr
-var lt = ltgee.runLT(startYear = startYear, endYear, startDay, endDay, aoi, index, [], changeParams, maskThese);
+var lt = ltgee.runLT(startYear = startYear, endYear, startDay, endDay, aoi, index, [], runParams, maskThese);
 
 // get the change map layers
 var changeImg = ltgee.getChangeMap(lt, changeParams);
@@ -122,7 +136,7 @@ var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
 var exportImg = changeImg.clip(aoi).unmask(0).short();
 //var exportImg = changeImg.yod;
 
-/*
+
 Export.image.toDrive({
   image: exportImg, 
   description: 'lt-gee_disturbance_map', 
@@ -133,7 +147,7 @@ Export.image.toDrive({
   crs: 'EPSG:5070', 
   maxPixels: 1e13
 });
-*/
+
 
 Export.image.toDrive({
   image: exportImg,
@@ -147,3 +161,9 @@ Export.image.toDrive({
 
 
 print(exportImg);
+
+}
+*/
+
+//Map.runFunction(DocIDs, aoi)
+
