@@ -58,30 +58,28 @@ aoiSmall.limit(0).evaluate(getMetadata);
 */
 
 
-
 //var onlyMcLoughlin = aoiSmall.filter(ee.Filter.inList("DocID", [86]));
 //print(onlyMcLoughlin);
 //print(NewFilt2.size())
 //Map.addLayer(onlyMcLoughlin, {color:'green'}, "OnlyMcLoughlin")
 
 
-
 //##########################################################################################
 // START INPUTS
 //##########################################################################################
+print(aoiSmall);
 
-var exportImg = aoiSmall.map(function(polygon){
+
+var exportImg = aoiSmall.map(function(aoi){
+  
   // define collection parameters
   //1984 will always be the start year due to Landsat image availability
   var startYear = 1984;
-  //end year will come from publication?
-  
+  var endYear = 2020;
+
   //is startDay relevant
   var startDay = '06-20';
   var endDay = '09-01';
-
-  //retrive metadata from polygon
-  var endYear = 2020;
 
 
   // define landtrendr parameters
@@ -118,10 +116,10 @@ var exportImg = aoiSmall.map(function(polygon){
   var index = 'NBR';
   var maskThese = ['cloud', 'shadow', 'snow', 'water'];
   changeParams.index = index;
-  
-  
+
+
   // run landtrendr
-  var lt = ltgee.runLT(startYear, endYear, startDay, endDay, aoi = polygon, index, [], runParams, maskThese);
+  var lt = ltgee.runLT(startYear, endYear, startDay, endDay, aoi, index, [], runParams, maskThese);
   
   // get the change map layers
   var changeImg = ltgee.getChangeMap(lt, changeParams);
@@ -145,18 +143,13 @@ var exportImg = aoiSmall.map(function(polygon){
   //Map.addLayer(changeImg.select(['mag']), magVizParms, 'Magnitude of Change');
   //Map.addLayer(changeImg.select(['yod']), yodVizParms, 'Year of Detection');
   
-  
-  // export change data to google drive
-  var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
-  
-
-  
-  var exportImg = changeImg.clip(polygon).unmask(0).short();
   //var exportImg = changeImg.yod;
+  var exportImg = changeImg.clip(aoi).unmask(0).short();
   
   return(exportImg)
-
 }); 
+
+var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
   //Export the image
   
   //Export.image.toDrive({
@@ -169,18 +162,10 @@ var exportImg = aoiSmall.map(function(polygon){
   //  crs: 'EPSG:5070', 
   //  maxPixels: 1e13
   //});
+print(exportImg)
 
-Export.image.toDrive({
-    image: exportImg,
-    folder: 'CaribouResults',
-    fileNamePrefix: "caribouTest",
-    maxPixels: 1e13,
-    scale: 30,
-    crs: 'EPSG:5070',
-    region: aoiSmall
-});
   
-print(exportImg);
+//print(exportImg);
 
 
 
