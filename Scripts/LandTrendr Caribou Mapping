@@ -35,12 +35,10 @@ function getCols(tableMetadata) {
 // previously defined function using `evaluate()`. The printed object is a
 // dictionary where keys are column names and values are datatypes.
 
-
-
 var startYear = 1984;
 
 //for demos
-var PolyFilt = ee.Filter.inList("PolygonID", ["Wittmer15_ColumbiaSouth"]);
+var PolyFilt = ee.Filter.inList("PolygonID", ["Wittmer15_ColumbiaSouth", "Wittmer15_ColumbiaNorth"]);
 var aoiSmall = aoi.filter(PolyFilt);
 
 
@@ -59,11 +57,6 @@ aoiSmall.limit(0).evaluate(getMetadata);
 */
 
 
-//var onlyMcLoughlin = aoiSmall.filter(ee.Filter.inList("DocID", [86]));
-//print(onlyMcLoughlin);
-//print(NewFilt2.size())
-//Map.addLayer(onlyMcLoughlin, {color:'green'}, "OnlyMcLoughlin")
-
 
 //##########################################################################################
 // START INPUTS
@@ -71,7 +64,7 @@ aoiSmall.limit(0).evaluate(getMetadata);
 print(aoiSmall);
 
 //writing this as map function is not working
-//var exportImg = aoiSmall.map(function(aoi){
+// e.g. var exportImg = aoiSmall.map(function(aoi){
 
 var LandTrendR = function(aoi){
   
@@ -152,30 +145,21 @@ var LandTrendR = function(aoi){
   return(exportImg)
 }; 
 
+
 var exportImg = LandTrendR(aoiSmall);
 
 var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
   //Export the image
   
-  //Export.image.toDrive({
-  //  image: exportImg, 
-  //  description: 'lt-gee_disturbance_map', 
-  //  folder: gdriveFolder, 
-  //  fileNamePrefix: 'lt-gee_disturbance_map', 
-  //  region: aoi, 
-  //  scale: 30, 
-  //  crs: 'EPSG:5070', 
-  //  maxPixels: 1e13
-  //});
-print(exportImg)
-
-  
-//print(exportImg);
-
-
-
-
-
-
-//Map.runFunction(DocIDs, aoi)
+  Export.image.toDrive({
+    image: exportImg, 
+    description: 'lt-gee_disturbance_map', 
+    folder: gdriveFolder, 
+    fileNamePrefix: 'lt-gee_disturbance_map', 
+    region: aoi, 
+    scale: 30, 
+    crs: 'EPSG:5070', 
+    maxPixels: 1e13
+  });
+print(exportImg);
 
