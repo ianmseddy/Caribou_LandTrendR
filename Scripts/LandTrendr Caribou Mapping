@@ -146,9 +146,12 @@ var LandTrendR = function(AOI){
   return changeImg;
 };
 
-
+//puyrely for plotting - remove once working
 /// moving the plotting outside for now 
 var palette = ['#9400D3', '#4B0082', '#0000FF', '#00FF00', '#FFFF00', '#FF7F00', '#FF0000'];
+var startYear = 1984;
+var endYear = 2020;
+
 var yodVizParms = {
    min: startYear,
    max: endYear,
