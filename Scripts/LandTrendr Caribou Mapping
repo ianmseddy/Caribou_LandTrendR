@@ -35,13 +35,9 @@ var theData = aoiSmall.toList(3);
 var totalPolys = theData.length();
 //print(totalPolys)
 
-function getCols(tableMetadata) {
-  print(tableMetadata.columns);
-}
 
-
-print(aoi.getInfo()['features'][88]['properties']['Meas_Years']);
-
+var poly = aoi.getInfo().features[84].properties.PolygonID;
+print(poly);
 // Fetch collection metadata (`.limit(0)`) and apply the
 // previously defined function using `evaluate()`. The printed object is a
 // dictionary where keys are column names and values are datatypes.
