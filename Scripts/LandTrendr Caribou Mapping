@@ -49,9 +49,8 @@ function getCols(tableMetadata) {
 // dictionary where keys are column names and values are datatypes.
 
 //did not work
-//aoiSmall.evaluate(getCols);
+var theCols = aoiSmall.evaluate(getCols);
 
-//aoiSmall.limit(0).evaluate(getCols);
 
 
 // filter using a function - we will use this with the map function to run LandTrendr for each study 
@@ -62,8 +61,6 @@ function getCols(tableMetadata) {
 //##########################################################################################
 // START INPUTS
 //##########################################################################################
-
-
 
 var LandTrendR = function(AOI){
   var aoi = ee.FeatureCollection(AOI);
@@ -172,14 +169,15 @@ var exportImg = aoiSmall
 //var exportImg = LandTrendR(test);
 Map.addLayer(exportImg.select(['yod']), yodVizParms, 'Year of Detection');
   
-print(exportImg);
+//print(exportImg);
 
 var imgListFirst2 = exportImg.toList(2);
-print(imgListFirst2);
+//print(imgListFirst2);
 
 
 var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
-
+var PolygonID = theCols.properties.PolygonID
+print(theCols);
 
  /*
 Export.image.toDrive({
