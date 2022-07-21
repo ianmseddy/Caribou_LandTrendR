@@ -33,14 +33,14 @@ Map.addLayer(aoiSmall, {color:'red'}, "AOI small");
 var theData = aoiSmall.toList(3);
 
 var totalPolys = theData.length();
-print(totalPolys)
+//print(totalPolys)
 
 function getCols(tableMetadata) {
   print(tableMetadata.columns);
 }
 
-var test = theData.slice(2);
-print(test);
+//var test = theData.slice(2);
+//print(test);
 
 
 
@@ -174,7 +174,12 @@ Map.addLayer(exportImg.select(['yod']), yodVizParms, 'Year of Detection');
   
 print(exportImg);
 
+var imgListFirst2 = exportImg.toList(2);
+print(imgListFirst2);
+
+
 var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
+
 
  /*
 Export.image.toDrive({
