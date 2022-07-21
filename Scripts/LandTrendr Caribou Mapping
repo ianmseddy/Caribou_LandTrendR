@@ -24,7 +24,7 @@ var aoi = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digiti
 
 //Ian added
 //isolate each individual range from Caribou range poly
-
+print(aoi);
 //for demos - note the typo in WITTmer
 var PolyFilt = ee.Filter.inList("PolygonID", ["WIttmer15_ColumbiaSouth", "Wittmer15_ColumbiaNorth"]);
 var aoiSmall = aoi.filter(PolyFilt);
@@ -39,19 +39,12 @@ function getCols(tableMetadata) {
   print(tableMetadata.columns);
 }
 
-//var test = theData.slice(2);
-//print(test);
 
-
-
+var years = ee.Number(aoiSmall.features.get('Meas_Years'));
+print(years);
 // Fetch collection metadata (`.limit(0)`) and apply the
 // previously defined function using `evaluate()`. The printed object is a
 // dictionary where keys are column names and values are datatypes.
-
-//did not work
-var theCols = aoiSmall.evaluate(getCols);
-
-
 
 // filter using a function - we will use this with the map function to run LandTrendr for each study 
 
@@ -176,8 +169,8 @@ var imgListFirst2 = exportImg.toList(2);
 
 
 var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
-var PolygonID = theCols.properties.PolygonID
-print(theCols);
+
+
 
  /*
 Export.image.toDrive({
