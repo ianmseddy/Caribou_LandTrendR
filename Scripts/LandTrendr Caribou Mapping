@@ -37,7 +37,7 @@ var totalPolys = theData.length();
 //print(totalPolys)
 
 // make an array that we can map over and use to index things. I am out of ideas at htis point
-var what = Array.apply(null, {length: totalPolys}).map(Number.call, Number);
+var polyIndex = Array.apply(null, {length: totalPolys}).map(Number.call, Number);
 
 
 
