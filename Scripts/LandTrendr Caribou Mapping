@@ -1,5 +1,6 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var aoi = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digitized_Caribou_StudyAreas");
+var aoi = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digitized_Caribou_StudyAreas"),
+    caribounames = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/caribou_SA_csv");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 //######################################################################################################## 
 //#                                                                                                    #\\
@@ -26,7 +27,7 @@ var aoi = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digiti
 //isolate each individual range from Caribou range poly
 print(aoi);
 //for demos - note the typo in WITTmer
-var PolyFilt = ee.Filter.inList("PolygonID", ["WIttmer15_ColumbiaSouth", "Wittmer15_ColumbiaNorth"]);
+var PolyFilt = ee.Filter.inList("PolygonID", ["WIttmer15_ColumbiaSouth", "Wittmer15_ColumbiaNorth", "Dalerum67"]);
 var aoiSmall = aoi.filter(PolyFilt);
 
 Map.addLayer(aoiSmall, {color:'red'}, "AOI small");
@@ -34,6 +35,10 @@ var theData = aoiSmall.toList(3);
 
 var totalPolys = theData.length();
 //print(totalPolys)
+
+// make an array that we can map over and use to index things. I am out of ideas at htis point
+var what = Array.apply(null, {length: totalPolys}).map(Number.call, Number);
+
 
 
 // Fetch collection metadata (`.limit(0)`) and apply the
@@ -162,17 +167,47 @@ print("imgList is ", imgListFirst2);
 
 var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
 
+//this works but I can't use get Info in a map function
 var poly = aoi.getInfo().features[76].properties.PolygonID;
-print("poly is", poly);
+
 
 var fcClient = aoiSmall.getInfo();
 print("fcClient is ", fcClient);
 
 
-//Map(imgListFirst2, function = exportFun, index = index);
-/*
-var exportFun = function(imgList, index) {
-  var fileName = fcClient.features[index].properties.PolygonID;
+var polyID = aoiSmall.select('PolygonID');
+print("polyID is", polyID);
+
+//var getID = function(x) {/
+//  var polygonID = x.features.properties.PolygonID;
+//  return polygonID;
+//};
+
+
+
+
+
+ /*
+ 
+ imgListFirst2.map(function (x, index, newFC) {
+  var fileName = newFC[index];
+  
+  Export.image.toDrive({
+  image: exportList, 
+  description: 'lt-gee_disturbance_map', 
+  folder: gdriveFolder, 
+  fileNamePrefix: fileName, 
+  //region: aoiSmall, I don't think we need a region as this is already done by the image? 
+  scale: 30, 
+  crs: 'EPSG:5070', 
+  maxPixels: 1e13
+  });
+});
+
+ 
+ 
+var exportFun = function(imgList, fc) {
+  var fileName = fc.features.properties.PolygonID;
   
   Export.image.toDrive({
   image: exportList, 
@@ -186,4 +221,4 @@ var exportFun = function(imgList, index) {
   });
   
 };
-*/
+ */
