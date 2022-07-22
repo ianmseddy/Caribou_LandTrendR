@@ -36,8 +36,6 @@ var totalPolys = theData.length();
 //print(totalPolys)
 
 
-var poly = aoi.getInfo().features[84].properties.PolygonID;
-print(poly);
 // Fetch collection metadata (`.limit(0)`) and apply the
 // previously defined function using `evaluate()`. The printed object is a
 // dictionary where keys are column names and values are datatypes.
@@ -158,27 +156,34 @@ var exportImg = aoiSmall
 //var exportImg = LandTrendR(test);
 Map.addLayer(exportImg.select(['yod']), yodVizParms, 'Year of Detection');
   
-//print(exportImg);
 
 var imgListFirst2 = exportImg.toList(2);
-//print(imgListFirst2);
-
+print("imgList is ", imgListFirst2);
 
 var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
 
+var poly = aoi.getInfo().features[76].properties.PolygonID;
+print("poly is", poly);
+
+var fcClient = aoiSmall.getInfo();
+print("fcClient is ", fcClient);
 
 
- /*
-Export.image.toDrive({
-  image: exportImg.select(["yod"]), 
+//Map(imgListFirst2, function = exportFun, index = index);
+/*
+var exportFun = function(imgList, index) {
+  var fileName = fcClient.features[index].properties.PolygonID;
+  
+  Export.image.toDrive({
+  image: exportList, 
   description: 'lt-gee_disturbance_map', 
   folder: gdriveFolder, 
-  fileNamePrefix: 'testMap', 
-  region: aoiSmall, 
+  fileNamePrefix: fileName, 
+  //region: aoiSmall, I don't think we need a region as this is already done by the image? 
   scale: 30, 
   crs: 'EPSG:5070', 
   maxPixels: 1e13
-});
- */
-
-
+  });
+  
+};
+*/
