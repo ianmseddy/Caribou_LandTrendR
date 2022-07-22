@@ -27,7 +27,7 @@ var aoi = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digiti
 //isolate each individual range from Caribou range poly
 print(aoi);
 //for demos - note the typo in WITTmer
-var PolyFilt = ee.Filter.inList("PolygonID", ["WIttmer15_ColumbiaSouth", "Wittmer15_ColumbiaNorth", "Dalerum67"]);
+var PolyFilt = ee.Filter.inList("PolygonID", ["WIttmer15_ColumbiaSouth", "Wittmer15_ColumbiaNorth"]);
 var aoiSmall = aoi.filter(PolyFilt);
 
 Map.addLayer(aoiSmall, {color:'red'}, "AOI small");
@@ -35,10 +35,7 @@ var theData = aoiSmall.toList(3);
 
 var totalPolys = theData.length();
 //print(totalPolys)
-
-// make an array that we can map over and use to index things. I am out of ideas at htis point
-var polyIndex = Array.apply(null, {length: totalPolys}).map(Number.call, Number);
-
+print(totalPolys);
 
 
 // Fetch collection metadata (`.limit(0)`) and apply the
@@ -168,21 +165,37 @@ print("imgList is ", imgListFirst2);
 var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
 
 //this works but I can't use get Info in a map function
-var poly = aoi.getInfo().features[76].properties.PolygonID;
+var randomPoly = aoi.getInfo().features[76].properties.PolygonID;
 
 
 var fcClient = aoiSmall.getInfo();
 print("fcClient is ", fcClient);
 
-
 var polyID = aoiSmall.select('PolygonID');
 print("polyID is", polyID);
 
+var polyList = aoiSmall.toList(2);
 //var getID = function(x) {/
 //  var polygonID = x.features.properties.PolygonID;
 //  return polygonID;
 //};
 
+imgListFirst2.forEach((element, index) => {
+  
+  var Temp = polyList[index];
+  var fileName = Temp.getInfo().features[0].properties.PolygonID;
+   
+  Export.image.toDrive({
+  image: exportList, 
+  description: 'lt-gee_disturbance_map', 
+  folder: gdriveFolder, 
+  fileNamePrefix: fileName, 
+  //region: aoiSmall, I don't think we need a region as this is already done by the image? 
+  scale: 30, 
+  crs: 'EPSG:5070', 
+  maxPixels: 1e13
+  });
+});
 
 
 
