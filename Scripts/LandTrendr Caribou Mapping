@@ -35,7 +35,7 @@ var theData = aoiSmall.toList(3);
 
 var totalPolys = theData.length();
 //print(totalPolys)
-print(totalPolys);
+print("totaly polys are", totalPolys);
 
 
 // Fetch collection metadata (`.limit(0)`) and apply the
@@ -159,20 +159,20 @@ var exportImg = aoiSmall
 print(exportImg);
 
 
+
 //var features = ee.FeatureCollection(
 //  [ee.Feature(null, {foo: 1}), ee.Feature(null, {foo: 2})]);
 
 // Create an ImageCollection from the FeatureCollection
 // by mapping a function over the FeatureCollection.
 
-var images = aoiSmall.map(function(feature) {
-  return ee.Image(ee.Number(feature.get('DocID')));
-});
-print(images);
+//this code works but makes a raster with value DocID
+//var images = aoiSmall.map(function(feature) {
+//  return ee.Image(ee.Number(feature.get('DocID')));
+//});
+//print(images);
 //var exportImg = LandTrendR(test);
 
-/*
-var imgListFirst2 = exportImg.toList(2);
 
 
 var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
@@ -186,18 +186,31 @@ print("polyID is", polyID);
 
 var polyList = aoiSmall.toList(2);
 
+var imgList= exportImg.toList(2);
 
-var serverList = ee.List.sequence(0, 1){
+var test = fcClient.features[1].properties.PolygonID;
+var serverList = ee.List.sequence(0, totalPolys);
   serverList = serverList.map(function(n) {
-    var index = ee.Number(n)
-    var Filename = fcClient.features[n].properties.PolygonID;
+    var index = ee.Number(n);
+    var Filename = fcClient.features[index].properties.PolygonID;
     var theAoiFilter = ee.Filter.inList("PolygonID", [Filename]);
-  var theAoi = aoiSmall.filter(theAoiFilter);
+    var theAoi = aoiSmall.filter(theAoiFilter);
+    var theImage = imgList.slice(index);
+    
+    Export.image.toDrive({
+    image: toExport, //exportLIst 
+    description: 'lt-gee_disturbance_map', 
+    folder: gdriveFolder, 
+    fileNamePrefix: Filename, 
+    region: theAoi, 
+    scale: 30, 
+    crs: 'EPSG:5070', 
+    maxPixels: 1e13
+    });
   });
-}
 
 
-
+/*
 
 
 
