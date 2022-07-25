@@ -155,9 +155,23 @@ var magVizParms = {
 
 var exportImg = aoiSmall
   .map(LandTrendR);
+  
+print(exportImg);
+
+
+//var features = ee.FeatureCollection(
+//  [ee.Feature(null, {foo: 1}), ee.Feature(null, {foo: 2})]);
+
+// Create an ImageCollection from the FeatureCollection
+// by mapping a function over the FeatureCollection.
+
+var images = aoiSmall.map(function(feature) {
+  return ee.Image(ee.Number(feature.get('DocID')));
+});
+print(images);
 //var exportImg = LandTrendR(test);
 
-
+/*
 var imgListFirst2 = exportImg.toList(2);
 
 
@@ -172,15 +186,30 @@ print("polyID is", polyID);
 
 var polyList = aoiSmall.toList(2);
 
+
+var serverList = ee.List.sequence(0, 1){
+  serverList = serverList.map(function(n) {
+    var index = ee.Number(n)
+    var Filename = fcClient.features[n].properties.PolygonID;
+    var theAoiFilter = ee.Filter.inList("PolygonID", [Filename]);
+  var theAoi = aoiSmall.filter(theAoiFilter);
+  });
+}
+
+
+
+
+
+
 var n = 0;
 
 while (n < 1) {
   n++;
-  var Filename = aoiSmall.features[n].properties.PolygonID;
+  var Filename = fcClient.features[n].properties.PolygonID;
   var theAoiFilter = ee.Filter.inList("PolygonID", [Filename]);
   var theAoi = aoiSmall.filter(theAoiFilter);
   
-  toExport = imgListFirst2[n];
+  var toExport = imgListFirst2[n];
     
   Export.image.toDrive({
   image: toExport, //exportLIst 
@@ -198,43 +227,6 @@ while (n < 1) {
 
 
 
-
-
-
-
-
- /*
- 
- imgListFirst2.map(function (x, index, newFC) {
-  var fileName = newFC[index];
-  
-  Export.image.toDrive({
-  image: exportList, 
-  description: 'lt-gee_disturbance_map', 
-  folder: gdriveFolder, 
-  fileNamePrefix: fileName, 
-  //region: aoiSmall, I don't think we need a region as this is already done by the image? 
-  scale: 30, 
-  crs: 'EPSG:5070', 
-  maxPixels: 1e13
-  });
-});
-
- 
- 
-var exportFun = function(imgList, fc) {
-  var fileName = fc.features.properties.PolygonID;
-  
-  Export.image.toDrive({
-  image: exportList, 
-  description: 'lt-gee_disturbance_map', 
-  folder: gdriveFolder, 
-  fileNamePrefix: fileName, 
-  //region: aoiSmall, I don't think we need a region as this is already done by the image? 
-  scale: 30, 
-  crs: 'EPSG:5070', 
-  maxPixels: 1e13
-  });
-  
-};
  */
+ 
+ 
