@@ -25,17 +25,32 @@ var aoi = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digiti
 
 //Ian added
 //isolate each individual range from Caribou range poly
-print(aoi);
+
 //for demos - note the typo in WITTmer
 var PolyFilt = ee.Filter.inList("PolygonID", ["WIttmer15_ColumbiaSouth", "Wittmer15_ColumbiaNorth"]);
 var aoiSmall = aoi.filter(PolyFilt);
 
 Map.addLayer(aoiSmall, {color:'red'}, "AOI small");
-var theData = aoiSmall.toList(3);
+var theData = aoiSmall.toList(2);
 
 var totalPolys = theData.length();
 //print(totalPolys)
-print("totaly polys are", totalPolys);
+
+function getCols(tableMetadata) {
+  print(tableMetadata.columns);
+}
+
+
+//this is how to get the polygon ID
+var PolygonID = aoiSmall.aggregate_array("PolygonID");
+print(PolygonID);
+var PolygonID = ee.Dictionary(PolygonID);
+
+
+var test = aoiSmall.set(PolygonID);
+print(test)
+
+var fcClient = aoiSmall.getInfo();
 
 
 // Fetch collection metadata (`.limit(0)`) and apply the
@@ -53,6 +68,9 @@ print("totaly polys are", totalPolys);
 
 var LandTrendR = function(AOI){
   var aoi = ee.FeatureCollection(AOI);
+  
+  //if this fails try aoi.toDictionary().values())
+  
   // define collection parameters
   //1984 will always be the start year due to Landsat image availability
   var startYear = 1984;
@@ -129,7 +147,7 @@ var LandTrendR = function(AOI){
   var exportImg = changeImg.clip(aoi).unmask(0).short();
   
    //Export the image
-  return changeImg;
+  return exportImg;
 };
 
 //puyrely for plotting - remove once working
@@ -178,55 +196,64 @@ print(exportImg);
 var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
 
 
-var fcClient = aoiSmall.getInfo();
-print("fcClient is ", fcClient);
-
-var polyID = aoiSmall.select('PolygonID');
-print("polyID is", polyID);
+var PolyIDs = aoiSmall.get("PolygonID");
+exportImg.set({
+  "tempIndex": ee.Array([0, 1])
+  });
 
 
 
 //This will never work because you cannot use export in map, apparently
-
 /*
+
+
+
 var serverList = ee.List.sequence(0, totalPolys);
-  serverList = serverList.map(function(n) {
-    var index = ee.Number(n);
-    //var Filename = fcClient.features[index].properties.PolygonID;
-    //var theAoiFilter = ee.Filter.inList("PolygonID", [Filename]);
-    //var theAoi = aoiSmall.filter(theAoiFilter);
-    var theImage = imgList.slice(index);
-    return(theImage);
-    //Export.image.toDrive({
-    //image: toExport, //exportLIst 
-    //description: 'lt-gee_disturbance_map', 
-    //folder: gdriveFolder, 
-    //fileNamePrefix: Filename, 
-    //region: theAoi, 
-    //scale: 30, 
-    //crs: 'EPSG:5070', 
-    //maxPixels: 1e13
-    //});
+  serverList = serverList.map(function(n, fcClient, aoiSmall, exportImg) {
+    
+    //var index = ee.Number(n);
+
+    
+    var Filename = fcClient.features[n].properties.PolygonID;
+    var theAoiFilter = ee.Filter.inList("PolygonID", [Filename]);
+    var theAoi = aoiSmall.filter(theAoiFilter);
+    var theImgFilter = ee.Filter.inList("tempIndex", index);
+    var theImage = exportImg.filter(theImgFilter);
+    
+    
+        
+    Export.image.toDrive({
+      image: theImage, //exportLIst 
+      description: 'lt-gee_disturbance_map', 
+      folder: gdriveFolder, 
+      fileNamePrefix: Filename, 
+      region: theAoi, 
+      scale: 30, 
+      crs: 'EPSG:5070', 
+      maxPixels: 1e13
+    });
   });
-//
+
 
 */
 
-
 var n = 0;
 
-var imgList = exportImg.toList();
+var imgList = exportImg.toList(totalPolys);
 
-while (n < 1) {
+/*
+
+while (n < 2) {
+
   n++;
-  var Filename = fcClient.features[n].properties.PolygonID;
-  var theAoiFilter = ee.Filter.inList("PolygonID", [Filename]);
-  var theAoi = aoiSmall.filter(theAoiFilter);
+  var eeN = ee.Number(n);
   
-  var toExport = imgList.slice(n);
-    
+    var theImgFilter = ee.Filter.inList("tempIndex", eeN);
+  var theImage = exportImg.filter(theImgFilter);
+   
+  
   Export.image.toDrive({
-  image: toExport, //exportLIst 
+  image: theImage, //exportLIst 
   description: 'lt-gee_disturbance_map', 
   folder: gdriveFolder, 
   fileNamePrefix: Filename, 
@@ -239,8 +266,47 @@ while (n < 1) {
 }
 
 
+imgList.map(function(x, aoiSmall){
 
+  var Filename = x.get("PolygonID");
+  var theAoiFilter = ee.Filter.inList("PolygonID", [Filename]);
+  var theAoi = aoiSmall.filter(theAoiFilter);
+  toExport =
+  
+  Export.image.toDrive({
+  image: x, //exportLIst 
+  description: 'lt-gee_disturbance_map', 
+  folder: gdriveFolder, 
+  fileNamePrefix: Filename, 
+  region: theAOI, 
+  scale: 30, 
+  crs: 'EPSG:5070', 
+  maxPixels: 1e13
+  });
+});
+ */
 
+/*
+ //once more with the map function
+ var exportFunc = function(x, fcClient, aoiSmall) {
+  var index = ee.Number(x.get("tempIndex"));
+  
+  var Filename = fcClient.features[index].properties.PolygonID;
+   var theAoiFilter = ee.Filter.inList("PolygonID", [Filename]);
+   var theAoi = aoiSmall.filter(theAoiFilter);
+  Export.image.toDrive({
+   image: x, //exportLIst 
+   description: 'lt-gee_disturbance_map', 
+   folder: gdriveFolder, 
+   fileNamePrefix: Filename, 
+   region: theAOI, 
+   scale: 30, 
+   crs: 'EPSG:5070', 
+   maxPixels: 1e13
+  });
+  
+ };
  
- 
- 
+exportImg.map(exportFunc, fcClient = fcClient, aoiSmall = aoiSmall);
+
+*/
