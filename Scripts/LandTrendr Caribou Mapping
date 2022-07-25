@@ -147,7 +147,7 @@ var LandTrendR = function(AOI){
   //var exportImg = changeImg.yod;
   
   var exportImg = changeImg.clip(aoi).unmask(0).short();
-  
+  exportImg.set("PolygonID", polyID);
    //Export the image
   return exportImg;
 };
