@@ -51,10 +51,6 @@ print(aoiSmall);
 
 //var test = aoiSmall.set(PolygonIDdic);
 //print(test)
-
-var fcClient = aoiSmall.getInfo();
-
-
 // Fetch collection metadata (`.limit(0)`) and apply the
 // previously defined function using `evaluate()`. The printed object is a
 // dictionary where keys are column names and values are datatypes.
