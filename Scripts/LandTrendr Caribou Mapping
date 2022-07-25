@@ -198,13 +198,6 @@ print(exportImg);
 var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
 
 
-var PolyIDs = aoiSmall.get("PolygonID");
-exportImg.set({
-  "tempIndex": ee.Array([0, 1])
-  });
-
-
-
 //This will never work because you cannot use export in map, apparently
 /*
 
