@@ -156,16 +156,12 @@ var magVizParms = {
 var exportImg = aoiSmall
   .map(LandTrendR);
 //var exportImg = LandTrendR(test);
-Map.addLayer(exportImg.select(['yod']), yodVizParms, 'Year of Detection');
-  
+
 
 var imgListFirst2 = exportImg.toList(2);
-print("imgList is ", imgListFirst2);
+
 
 var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
-
-//this works but I can't use get Info in a map function
-var randomPoly = aoi.getInfo().features[76].properties.PolygonID;
 
 
 var fcClient = aoiSmall.getInfo();
@@ -175,27 +171,34 @@ var polyID = aoiSmall.select('PolygonID');
 print("polyID is", polyID);
 
 var polyList = aoiSmall.toList(2);
-//var getID = function(x) {/
-//  var polygonID = x.features.properties.PolygonID;
-//  return polygonID;
-//};
 
-imgListFirst2.forEach((element, index) => {
+var n = 0;
+
+while (n < 1) {
+  n++;
+  var Filename = aoiSmall.features[n].properties.PolygonID;
+  var theAoiFilter = ee.Filter.inList("PolygonID", [Filename]);
+  var theAoi = aoiSmall.filter(theAoiFilter);
   
-  var Temp = polyList[index];
-  var fileName = Temp.getInfo().features[0].properties.PolygonID;
-   
+  toExport = imgListFirst2[n];
+    
   Export.image.toDrive({
-  image: exportList, 
+  image: toExport, //exportLIst 
   description: 'lt-gee_disturbance_map', 
   folder: gdriveFolder, 
-  fileNamePrefix: fileName, 
-  //region: aoiSmall, I don't think we need a region as this is already done by the image? 
+  fileNamePrefix: Filename, 
+  region: theAoi, 
   scale: 30, 
   crs: 'EPSG:5070', 
   maxPixels: 1e13
   });
-});
+  
+}
+
+
+
+
+
 
 
 
