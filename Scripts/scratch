@@ -1,35 +1,28 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var aoi = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digitized_Caribou_StudyAreas");
+var aoi = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digitized_Caribou_StudyAreas"),
+    table = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/caribou_study_areas_csv");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-//working code #####
-//print("Count before filter:", table.size())
-function getCols(aoi){ 
-  var columns = print(aoi.columns);
-  return(columns);
-}
 
 
-//turn this filter into a function that will filter by docID - or is this relevant.. do we just need the geographic area to avoid double counting. 
-
-print(count);
-
-aoi.evaluate(getCols);
 var aoiDat = aoi.getInfo();
-print(aoiDat.length);
 
-print("properties of first feature is ", aoiDat.features[86].properties.DocID);
+
 print("some object keys = ", Object.keys(aoiDat));
-print("keys columns", Object.keys(aoiDat)[1]);
-
-var arrayAOI = aoiDat.features;
-
-print(arrayAOI);
 
 
-//var firstFilter = table.filter('Pub_Year', 2005); #doesnt' work
+var what = '5' + 3;
+var whatagain = '5' - 3;
+print(what);
+print(whatagain);
 
-var onlyMcLoughlin = aoi.filter(ee.Filter.inList("DocID", [86]));
-print("onlyMcloughlin is", onlyMcLoughlin);
-//print(NewFilt2.size())
-Map.addLayer(onlyMcLoughlin, {color:'green'}, "OnlyMcLoughlin")
+var n = 0;
+var x = 0;
+
+
+while (n < 87) {
+  n++;
+  var Filename = aoiDat.features[n].properties.PolygonID;
+  
+  print("n is ", n, "for Filename: ", Filename);
+}
 
