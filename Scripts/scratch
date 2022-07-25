@@ -26,3 +26,8 @@ while (n < 87) {
   print("n is ", n, "for Filename: ", Filename);
 }
 
+//this is how to get the polygon ID
+var PolygonID = aoiSmall.aggregate_array("PolygonID");
+//need a list of 1 to whatever
+aoiSmall = aoiSmall.set("PolygonID", PolygonID);
+print(aoiSmall);
