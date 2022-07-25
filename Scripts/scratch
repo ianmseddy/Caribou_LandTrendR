@@ -4,51 +4,32 @@ var aoi = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digiti
 //working code #####
 //print("Count before filter:", table.size())
 function getCols(aoi){ 
-  print(aoi.columns);
+  var columns = print(aoi.columns);
+  return(columns);
 }
 
 
 //turn this filter into a function that will filter by docID - or is this relevant.. do we just need the geographic area to avoid double counting. 
 
-var provincialFilt = ee.Filter.inList("Province", ["SK", "MB"]);
-var FilteredAOI = aoi.filter(provincialFilt);
-// filter using a function - we will use this with the map function to run LandTrendr for each study 
-//function filterByDocID(DocID){
-//  return(ee.Filter.inList("DocID", DocID))
-//}
-//91 is used as an example here - the arg will come from map
-//var NewFilt2  = FilteredAOI.filter(filterBy));
-//print(NewFilt2.size())
-FilteredAOI.evaluate(getCols);
-//print(FilteredAOI.propertyNames());
-var Province = FilteredAOI.get("Province");
-print(Province);
+print(count);
 
-//print(ee.String(FilteredAOI.get("Province")));
+aoi.evaluate(getCols);
+var aoiDat = aoi.getInfo();
+print(aoiDat.length);
 
-//ee.String(fc.get('provider'))
+print("properties of first feature is ", aoiDat.features[86].properties.DocID);
+print("some object keys = ", Object.keys(aoiDat));
+print("keys columns", Object.keys(aoiDat)[1]);
 
-/*var singleProp = fc.select('fuel1');
-print('Single property selected',
-      singleProp.first());
-*/
-//Map.addLayer(NewFilt2, {color:'green'}, 'NewFilt2')
+var arrayAOI = aoiDat.features;
 
-//print(FilteredData.size())
-
-
-////code that doesn't work ######
-
-
-//var firstFilter = table.filter(ee.Filter.gt('Publication Year', 2005))
-//print("Count after first filter:", firstFilter.size())
-//var newTable = table.filter(ee.Filter.eq("Pub_Year", 2005))
-
+print(arrayAOI);
 
 
 //var firstFilter = table.filter('Pub_Year', 2005); #doesnt' work
 
 var onlyMcLoughlin = aoi.filter(ee.Filter.inList("DocID", [86]));
-print(onlyMcLoughlin);
+print("onlyMcloughlin is", onlyMcLoughlin);
 //print(NewFilt2.size())
 Map.addLayer(onlyMcLoughlin, {color:'green'}, "OnlyMcLoughlin")
+
