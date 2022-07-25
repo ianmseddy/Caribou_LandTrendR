@@ -43,12 +43,14 @@ function getCols(tableMetadata) {
 
 //this is how to get the polygon ID
 var PolygonID = aoiSmall.aggregate_array("PolygonID");
-print(PolygonID);
-var PolygonID = ee.Dictionary(PolygonID);
+//need a list of 1 to whatever
+aoiSmall = aoiSmall.set("PolygonID", PolygonID);
+print(aoiSmall);
 
 
-var test = aoiSmall.set(PolygonID);
-print(test)
+
+//var test = aoiSmall.set(PolygonIDdic);
+//print(test)
 
 var fcClient = aoiSmall.getInfo();
 
@@ -68,7 +70,7 @@ var fcClient = aoiSmall.getInfo();
 
 var LandTrendR = function(AOI){
   var aoi = ee.FeatureCollection(AOI);
-  
+  var polyID = aoi.get("PolygonID");
   //if this fails try aoi.toDictionary().values())
   
   // define collection parameters
