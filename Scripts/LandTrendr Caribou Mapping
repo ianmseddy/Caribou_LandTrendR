@@ -184,37 +184,38 @@ print("fcClient is ", fcClient);
 var polyID = aoiSmall.select('PolygonID');
 print("polyID is", polyID);
 
-var polyList = aoiSmall.toList(2);
 
-var imgList= exportImg.toList(2);
 
-var test = fcClient.features[1].properties.PolygonID;
+//This will never work because you cannot use export in map, apparently
+
+/*
 var serverList = ee.List.sequence(0, totalPolys);
   serverList = serverList.map(function(n) {
     var index = ee.Number(n);
-    var Filename = fcClient.features[index].properties.PolygonID;
-    var theAoiFilter = ee.Filter.inList("PolygonID", [Filename]);
-    var theAoi = aoiSmall.filter(theAoiFilter);
+    //var Filename = fcClient.features[index].properties.PolygonID;
+    //var theAoiFilter = ee.Filter.inList("PolygonID", [Filename]);
+    //var theAoi = aoiSmall.filter(theAoiFilter);
     var theImage = imgList.slice(index);
-    
-    Export.image.toDrive({
-    image: toExport, //exportLIst 
-    description: 'lt-gee_disturbance_map', 
-    folder: gdriveFolder, 
-    fileNamePrefix: Filename, 
-    region: theAoi, 
-    scale: 30, 
-    crs: 'EPSG:5070', 
-    maxPixels: 1e13
-    });
+    return(theImage);
+    //Export.image.toDrive({
+    //image: toExport, //exportLIst 
+    //description: 'lt-gee_disturbance_map', 
+    //folder: gdriveFolder, 
+    //fileNamePrefix: Filename, 
+    //region: theAoi, 
+    //scale: 30, 
+    //crs: 'EPSG:5070', 
+    //maxPixels: 1e13
+    //});
   });
+//
 
-
-/*
-
+*/
 
 
 var n = 0;
+
+var imgList = exportImg.toList();
 
 while (n < 1) {
   n++;
@@ -222,7 +223,7 @@ while (n < 1) {
   var theAoiFilter = ee.Filter.inList("PolygonID", [Filename]);
   var theAoi = aoiSmall.filter(theAoiFilter);
   
-  var toExport = imgListFirst2[n];
+  var toExport = imgList.slice(n);
     
   Export.image.toDrive({
   image: toExport, //exportLIst 
@@ -240,6 +241,6 @@ while (n < 1) {
 
 
 
- */
+ 
  
  
