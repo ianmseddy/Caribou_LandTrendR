@@ -27,7 +27,7 @@ var aoi = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digiti
 //isolate each individual range from Caribou range poly
 
 //for demos - note the typo in WITTmer
-var PolyFilt = ee.Filter.inList("PolygonID", ["WIttmer15_ColumbiaSouth", "Wittmer15_ColumbiaNorth", "Dalerum67_RedEarth"]);
+var PolyFilt = ee.Filter.inList("PolygonID", ["WIttmer15_ColumbiaSouth", "Wittmer15_ColumbiaNorth"]);
 var aoiSmall = aoi.filter(PolyFilt);
 
 var n = aoiSmall.size();
@@ -178,22 +178,23 @@ var eePolyID = ee.String("PolygonID == ");
 eePolyID = eePolyID.cat('"').cat(polyID).cat('"');
 var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
 
-print(exportImg.get("PolygonID"));
 
-var testFilter = ee.Filter.eq("PolygonID", "Dalerum67_RedEarth");
+var testFilter = ee.Filter.eq("PolygonID", "Wittmer15_ColumbiaNorth");
 
-var testImg = ee.Image(exportImg.filter(testFilter));
+
 var testAOI = aoiSmall.filter(testFilter);
-
-print("testImg is", testImg);
 print("testAOI is", testAOI);
+print(exportImg);
 
+var test = exportImg.get("features");
+print("test is", test);
 
+/*
 Export.image.toDrive({
-image: testImg, //exportLIst 
+image: testImg.select(), //exportLIst 
 description: 'lt-gee_disturbance_map', 
-folder: gdriveFolder, 
-fileNamePrefix: "Dalerum67_RedEarth", 
+folder: gdriveFolder,
+fileNamePrefix: "Dalerum67_RedEarth_yod", 
 region: testAOI, 
 scale: 30, 
 crs: 'EPSG:5070', 
@@ -201,7 +202,6 @@ maxPixels: 1e13
 });
 
 
-/*
 for (var i = 0; i < n; i++) {
   //casting causes the image to lose it's properties. 
   var polyID = PolygonID.get(i);
