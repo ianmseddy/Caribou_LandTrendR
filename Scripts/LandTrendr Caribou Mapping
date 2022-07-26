@@ -185,13 +185,14 @@ print(colID);
 var colList = exportImg.toList(totalPolys);
 var n = 0;
 var polyFilt = ee.Filter.inList("PolygonID", id);
-
+print("colList is", colList);
 
 for (var i = 0; i < n; i++) {
   var img = ee.Image(colList.get(i));
+  print("img is", img);
   var id = img.get("PolygonID");
-  var aoiPoly = aoiSmall;
-  var aoiSmall = aoi.filter(PolyFilt);
+  var aoiPoly = aoiSmall.filter(PolyFilt);
+  print("aoiSmall is", aoiPoly);
     Export.image.toDrive({
   image: x, //exportLIst 
   description: 'lt-gee_disturbance_map', 
