@@ -36,6 +36,7 @@ var theData = aoiSmall.toList(2);
 var totalPolys = theData.length();
 //print(totalPolys)
 
+//this prints table metadata but has not proven useful
 function getCols(tableMetadata) {
   print(tableMetadata.columns);
 }
@@ -47,15 +48,11 @@ var PolygonID = aoiSmall.aggregate_array("PolygonID");
 aoiSmall = aoiSmall.set("PolygonID", PolygonID);
 print(aoiSmall);
 
-
-
 //var test = aoiSmall.set(PolygonIDdic);
 //print(test)
 // Fetch collection metadata (`.limit(0)`) and apply the
 // previously defined function using `evaluate()`. The printed object is a
 // dictionary where keys are column names and values are datatypes.
-
-// filter using a function - we will use this with the map function to run LandTrendr for each study 
 
 
 // /*
@@ -174,23 +171,6 @@ var exportImg = aoiSmall
   
 print(exportImg);
 
-
-
-//var features = ee.FeatureCollection(
-//  [ee.Feature(null, {foo: 1}), ee.Feature(null, {foo: 2})]);
-
-// Create an ImageCollection from the FeatureCollection
-// by mapping a function over the FeatureCollection.
-
-//this code works but makes a raster with value DocID
-//var images = aoiSmall.map(function(feature) {
-//  return ee.Image(ee.Number(feature.get('DocID')));
-//});
-//print(images);
-//var exportImg = LandTrendR(test);
-
-
-
 var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
 
 
@@ -225,17 +205,16 @@ var serverList = ee.List.sequence(0, totalPolys);
     });
   });
 
-
 */
 
-var n = 0;
 
-var imgList = exportImg.toList(totalPolys);
 
 /*
+//don't use this mechanism
+var imgList = exportImg.toList(totalPolys);
+var n = 0;
 
 while (n < 2) {
-
   n++;
   var eeN = ee.Number(n);
   
@@ -255,7 +234,7 @@ while (n < 2) {
   });
   
 }
-
+ */
 
 imgList.map(function(x, aoiSmall){
 
@@ -275,7 +254,7 @@ imgList.map(function(x, aoiSmall){
   maxPixels: 1e13
   });
 });
- */
+
 
 /*
  //once more with the map function
