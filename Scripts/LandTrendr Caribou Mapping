@@ -27,7 +27,7 @@ var aoi = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digiti
 //isolate each individual range from Caribou range poly
 
 //for demos - note the typo in WITTmer
-var PolyFilt = ee.Filter.inList("PolygonID", ["WIttmer15_ColumbiaSouth", "Wittmer15_ColumbiaNorth"]);
+var PolyFilt = ee.Filter.inList("PolygonID", ["WIttmer15_ColumbiaSouth", "Wittmer15_ColumbiaNorth", "Hervieux87_ColdLakesAB"]);
 var aoiSmall = aoi.filter(PolyFilt);
 
 Map.addLayer(aoiSmall, {color:'red'}, "AOI small");
@@ -47,7 +47,7 @@ function getCols(tableMetadata) {
 var PolygonID = aoiSmall.aggregate_array("PolygonID");
 //need a list of 1 to whatever
 aoiSmall = aoiSmall.set("PolygonID", PolygonID);
-print(aoiSmall);
+
 
 //var test = aoiSmall.set(PolygonIDdic);
 //print(test)
@@ -169,32 +169,35 @@ var magVizParms = {
 
 var exportImg = aoiSmall
   .map(LandTrendR);
-  
 print("exportImg is", exportImg);
+  
+var polyID = ee.String(PolygonID.get(2));
+var PolyFilt = ee.Filter.inList("PolygonID", [polyID]);
+var eePolyID = ee.String("PolygonID == ");
+eePolyID = eePolyID.cat('"').cat(polyID).cat('"');
+print(eePolyID);
 
-var n = exportImg.size().getInfo();
-var colList = exportImg.toList(n);
-
-var colID = exportImg.get("PolygonID");
-print(colID);
+var test = aoiSmall.filter(eePolyID);
+print("test is", test);
+Map.add(test);
 
 
-
-
-//don't use this mechanism
-var colList = exportImg.toList(totalPolys);
-var n = 0;
-var polyFilt = ee.Filter.inList("PolygonID", id);
-print("colList is", colList);
-
+/*
 for (var i = 0; i < n; i++) {
+  //casting causes the image to lose it's properties. 
+  
+
+  var polyID = PolygonID.get(i);
   var img = ee.Image(colList.get(i));
-  print("img is", img);
+  
   var id = img.get("PolygonID");
+  print("id is", id);
   var aoiPoly = aoiSmall.filter(PolyFilt);
   print("aoiSmall is", aoiPoly);
+  
+  
     Export.image.toDrive({
-  image: x, //exportLIst 
+  image: img, //exportLIst 
   description: 'lt-gee_disturbance_map', 
   folder: gdriveFolder, 
   fileNamePrefix: id, 
@@ -205,26 +208,4 @@ for (var i = 0; i < n; i++) {
   });
 }
 
-/*
-var exporting = function(x, aoi){
-
- //cast to image
-  //x = ee.Image(x) ;
-  var Filename = ee.String(x.get("PolygonID"));
-  var PolyFilt = ee.Filter.inList("PolygonID", [Filename]);
-  aoi = aoi.filter(PolyFilt);
-  var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
-
-  Export.image.toDrive({
-  image: x, //exportLIst 
-  description: 'lt-gee_disturbance_map', 
-  folder: gdriveFolder, 
-  fileNamePrefix: Filename, 
-  region: aoi, 
-  scale: 30, 
-  crs: 'EPSG:5070', 
-  maxPixels: 1e13
-  });
-  return(x); //to sastisfy map? it's possibel this fails. 
-};
- */
+*/
