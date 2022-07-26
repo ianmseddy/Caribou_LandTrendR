@@ -42,6 +42,7 @@ function getCols(tableMetadata) {
 }
 
 
+
 //this is how to get the polygon ID
 var PolygonID = aoiSmall.aggregate_array("PolygonID");
 //need a list of 1 to whatever
@@ -169,114 +170,60 @@ var magVizParms = {
 var exportImg = aoiSmall
   .map(LandTrendR);
   
-print(exportImg);
+print("exportImg is", exportImg);
 
-var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
+var n = exportImg.size().getInfo();
+var colList = exportImg.toList(n);
 
-
-//This will never work because you cannot use export in map, apparently
-/*
-
-
-
-var serverList = ee.List.sequence(0, totalPolys);
-  serverList = serverList.map(function(n, fcClient, aoiSmall, exportImg) {
-    
-    //var index = ee.Number(n);
-
-    
-    var Filename = fcClient.features[n].properties.PolygonID;
-    var theAoiFilter = ee.Filter.inList("PolygonID", [Filename]);
-    var theAoi = aoiSmall.filter(theAoiFilter);
-    var theImgFilter = ee.Filter.inList("tempIndex", index);
-    var theImage = exportImg.filter(theImgFilter);
-    
-    
-        
-    Export.image.toDrive({
-      image: theImage, //exportLIst 
-      description: 'lt-gee_disturbance_map', 
-      folder: gdriveFolder, 
-      fileNamePrefix: Filename, 
-      region: theAoi, 
-      scale: 30, 
-      crs: 'EPSG:5070', 
-      maxPixels: 1e13
-    });
-  });
-
-*/
+var colID = exportImg.get("PolygonID");
+print(colID);
 
 
 
-/*
+
 //don't use this mechanism
-var imgList = exportImg.toList(totalPolys);
+var colList = exportImg.toList(totalPolys);
 var n = 0;
+var polyFilt = ee.Filter.inList("PolygonID", id);
 
-while (n < 2) {
-  n++;
-  var eeN = ee.Number(n);
-  
-    var theImgFilter = ee.Filter.inList("tempIndex", eeN);
-  var theImage = exportImg.filter(theImgFilter);
-   
-  
-  Export.image.toDrive({
-  image: theImage, //exportLIst 
+
+for (var i = 0; i < n; i++) {
+  var img = ee.Image(colList.get(i));
+  var id = img.get("PolygonID");
+  var aoiPoly = aoiSmall;
+  var aoiSmall = aoi.filter(PolyFilt);
+    Export.image.toDrive({
+  image: x, //exportLIst 
   description: 'lt-gee_disturbance_map', 
   folder: gdriveFolder, 
-  fileNamePrefix: Filename, 
-  region: theAoi, 
+  fileNamePrefix: id, 
+  region: aoiPoly, 
   scale: 30, 
   crs: 'EPSG:5070', 
   maxPixels: 1e13
   });
-  
 }
- */
 
-imgList.map(function(x, aoiSmall){
+/*
+var exporting = function(x, aoi){
 
-  var Filename = x.get("PolygonID");
-  var theAoiFilter = ee.Filter.inList("PolygonID", [Filename]);
-  var theAoi = aoiSmall.filter(theAoiFilter);
-  toExport =
-  
+ //cast to image
+  //x = ee.Image(x) ;
+  var Filename = ee.String(x.get("PolygonID"));
+  var PolyFilt = ee.Filter.inList("PolygonID", [Filename]);
+  aoi = aoi.filter(PolyFilt);
+  var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
+
   Export.image.toDrive({
   image: x, //exportLIst 
   description: 'lt-gee_disturbance_map', 
   folder: gdriveFolder, 
   fileNamePrefix: Filename, 
-  region: theAOI, 
+  region: aoi, 
   scale: 30, 
   crs: 'EPSG:5070', 
   maxPixels: 1e13
   });
-});
-
-
-/*
- //once more with the map function
- var exportFunc = function(x, fcClient, aoiSmall) {
-  var index = ee.Number(x.get("tempIndex"));
-  
-  var Filename = fcClient.features[index].properties.PolygonID;
-   var theAoiFilter = ee.Filter.inList("PolygonID", [Filename]);
-   var theAoi = aoiSmall.filter(theAoiFilter);
-  Export.image.toDrive({
-   image: x, //exportLIst 
-   description: 'lt-gee_disturbance_map', 
-   folder: gdriveFolder, 
-   fileNamePrefix: Filename, 
-   region: theAOI, 
-   scale: 30, 
-   crs: 'EPSG:5070', 
-   maxPixels: 1e13
-  });
-  
- };
- 
-exportImg.map(exportFunc, fcClient = fcClient, aoiSmall = aoiSmall);
-
-*/
+  return(x); //to sastisfy map? it's possibel this fails. 
+};
+ */
