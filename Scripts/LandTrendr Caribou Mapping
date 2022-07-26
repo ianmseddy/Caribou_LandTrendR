@@ -27,14 +27,15 @@ var aoi = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digiti
 //isolate each individual range from Caribou range poly
 
 //for demos - note the typo in WITTmer
-var PolyFilt = ee.Filter.inList("PolygonID", ["WIttmer15_ColumbiaSouth", "Wittmer15_ColumbiaNorth", "Hervieux87_ColdLakesAB"]);
+var PolyFilt = ee.Filter.inList("PolygonID", ["WIttmer15_ColumbiaSouth", "Wittmer15_ColumbiaNorth", "Dalerum67_RedEarth"]);
 var aoiSmall = aoi.filter(PolyFilt);
 
-Map.addLayer(aoiSmall, {color:'red'}, "AOI small");
-var theData = aoiSmall.toList(2);
+var n = aoiSmall.size();
+print(n);
 
-var totalPolys = theData.length();
-//print(totalPolys)
+var theData = aoiSmall.toList(ee.Number(n));
+
+
 
 //this prints table metadata but has not proven useful
 function getCols(tableMetadata) {
@@ -168,42 +169,38 @@ var magVizParms = {
 var exportImg = aoiSmall
   .map(LandTrendR);
 print("exportImg is", exportImg);
+
+var colList = exportImg.toList(n);
   
-var polyID = ee.String(PolygonID.get(2));
-var PolyFilt = ee.Filter.inList("PolygonID", [polyID]);
+var polyID = ee.String(PolygonID.get(0));
+
 var eePolyID = ee.String("PolygonID == ");
 eePolyID = eePolyID.cat('"').cat(polyID).cat('"');
-print(eePolyID);
 
-var test = aoiSmall.filter(eePolyID);
-print("test is", test);
-Map.add(test);
+print(n);
 
-
-/*
-for (var i = 0; i < n; i++) {
+ for (var i = 0; i < n; i++) {
   //casting causes the image to lose it's properties. 
-  
-
   var polyID = PolygonID.get(i);
   var img = ee.Image(colList.get(i));
+  var eePolyID = ee.String("PolygonID == ");
+  eePolyID = eePolyID.cat('"').cat(polyID).cat('"');
   
-  var id = img.get("PolygonID");
-  print("id is", id);
-  var aoiPoly = aoiSmall.filter(PolyFilt);
+  print("polyID is", polyID);
+  var aoiPoly = aoiSmall.filter(eePolyID);
   print("aoiSmall is", aoiPoly);
   
   
-    Export.image.toDrive({
+  Export.image.toDrive({
   image: img, //exportLIst 
   description: 'lt-gee_disturbance_map', 
   folder: gdriveFolder, 
-  fileNamePrefix: id, 
+  fileNamePrefix: polyID, 
   region: aoiPoly, 
   scale: 30, 
   crs: 'EPSG:5070', 
   maxPixels: 1e13
   });
 }
+print(i);
 
-*/
