@@ -31,3 +31,16 @@ var PolygonID = aoiSmall.aggregate_array("PolygonID");
 //need a list of 1 to whatever
 aoiSmall = aoiSmall.set("PolygonID", PolygonID);
 print(aoiSmall);
+
+//var features = ee.FeatureCollection(
+//  [ee.Feature(null, {foo: 1}), ee.Feature(null, {foo: 2})]);
+
+// Create an ImageCollection from the FeatureCollection
+// by mapping a function over the FeatureCollection.
+
+//this code works but makes a raster with value DocID
+//var images = aoiSmall.map(function(feature) {
+//  return ee.Image(ee.Number(feature.get('DocID')));
+//});
+//print(images);
+//var exportImg = LandTrendR(test);
