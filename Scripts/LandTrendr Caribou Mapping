@@ -41,8 +41,6 @@ function getCols(tableMetadata) {
   print(tableMetadata.columns);
 }
 
-
-
 //this is how to get the polygon ID
 var PolygonID = aoiSmall.aggregate_array("PolygonID");
 //need a list of 1 to whatever
