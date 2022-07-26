@@ -117,7 +117,7 @@ var LandTrendR = function(AOI){
   
   // get the change map layers
   var changeImg = ltgee.getChangeMap(lt, changeParams);
-  
+  changeImg.set("PolygonID", polyID);
   // set visualization dictionaries
   var palette = ['#9400D3', '#4B0082', '#0000FF', '#00FF00', '#FFFF00', '#FF7F00', '#FF0000'];
   var yodVizParms = {
@@ -140,7 +140,7 @@ var LandTrendR = function(AOI){
   //var exportImg = changeImg.yod;
   
   var exportImg = changeImg.clip(aoi).unmask(0).short();
-  exportImg.set("PolygonID", polyID);
+ 
    //Export the image
   return exportImg;
 };
@@ -176,13 +176,36 @@ var polyID = ee.String(PolygonID.get(0));
 
 var eePolyID = ee.String("PolygonID == ");
 eePolyID = eePolyID.cat('"').cat(polyID).cat('"');
+var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
 
-print(n);
+print(exportImg.get("PolygonID"));
 
- for (var i = 0; i < n; i++) {
+var testFilter = ee.Filter.eq("PolygonID", "Dalerum67_RedEarth");
+
+var testImg = ee.Image(exportImg.filter(testFilter));
+var testAOI = aoiSmall.filter(testFilter);
+
+print("testImg is", testImg);
+print("testAOI is", testAOI);
+
+
+Export.image.toDrive({
+image: testImg, //exportLIst 
+description: 'lt-gee_disturbance_map', 
+folder: gdriveFolder, 
+fileNamePrefix: "Dalerum67_RedEarth", 
+region: testAOI, 
+scale: 30, 
+crs: 'EPSG:5070', 
+maxPixels: 1e13
+});
+
+
+/*
+for (var i = 0; i < n; i++) {
   //casting causes the image to lose it's properties. 
   var polyID = PolygonID.get(i);
-  var img = ee.Image(colList.get(i));
+  
   var eePolyID = ee.String("PolygonID == ");
   eePolyID = eePolyID.cat('"').cat(polyID).cat('"');
   
@@ -190,6 +213,7 @@ print(n);
   var aoiPoly = aoiSmall.filter(eePolyID);
   print("aoiSmall is", aoiPoly);
   
+
   
   Export.image.toDrive({
   image: img, //exportLIst 
@@ -202,5 +226,4 @@ print(n);
   maxPixels: 1e13
   });
 }
-print(i);
-
+*/
