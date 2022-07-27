@@ -117,7 +117,11 @@ var LandTrendR = function(AOI){
   
   // get the change map layers
   var changeImg = ltgee.getChangeMap(lt, changeParams);
+  
+  //set the polygonID
   changeImg.set("PolygonID", polyID);
+  
+  
   // set visualization dictionaries
   var palette = ['#9400D3', '#4B0082', '#0000FF', '#00FF00', '#FFFF00', '#FF7F00', '#FF0000'];
   var yodVizParms = {
@@ -168,27 +172,31 @@ var magVizParms = {
 
 var exportImg = aoiSmall
   .map(LandTrendR);
-print("exportImg is", exportImg);
 
-var colList = exportImg.toList(n);
+var exportlList = exportImg.toList(n);
   
-var polyID = ee.String(PolygonID.get(0));
+//var polyID = ee.String(PolygonID.get(0));
+//var eePolyID = ee.String("PolygonID == ");
+//eePolyID = eePolyID.cat('"').cat(polyID).cat('"');
+//var testFilter = ee.Filter.eq(eePolyID);
 
-var eePolyID = ee.String("PolygonID == ");
-eePolyID = eePolyID.cat('"').cat(polyID).cat('"');
 var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
 
 
-var testFilter = ee.Filter.eq("PolygonID", "Wittmer15_ColumbiaNorth");
+Export.image.toDrive({
+image: test2, //exportLIst 
+description: 'lt-gee_disturbance_map', 
+folder: gdriveFolder,
+fileNamePrefix: "thisisaTest", 
+region: testAOI, 
+scale: 30, 
+crs: 'EPSG:5070', 
+maxPixels: 1e13
+});
 
 
-var testAOI = aoiSmall.filter(testFilter);
-print("testAOI is", testAOI);
-print(exportImg);
 
-var test = exportImg.get("features");
-print("test is", test);
-
+//Map.addLayer(testAOI);
 /*
 Export.image.toDrive({
 image: testImg.select(), //exportLIst 
@@ -201,6 +209,7 @@ crs: 'EPSG:5070',
 maxPixels: 1e13
 });
 
+*/
 
 for (var i = 0; i < n; i++) {
   //casting causes the image to lose it's properties. 
@@ -212,6 +221,9 @@ for (var i = 0; i < n; i++) {
   print("polyID is", polyID);
   var aoiPoly = aoiSmall.filter(eePolyID);
   print("aoiSmall is", aoiPoly);
+  
+  var img = colList.get(i);
+  
   
 
   
@@ -226,4 +238,4 @@ for (var i = 0; i < n; i++) {
   maxPixels: 1e13
   });
 }
-*/
+
