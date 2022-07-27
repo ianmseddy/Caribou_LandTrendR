@@ -44,3 +44,18 @@ print(aoiSmall);
 //});
 //print(images);
 //var exportImg = LandTrendR(test);
+
+
+var testAOI = aoiSmall.filter(testFilter);
+print("testAOI is", testAOI);
+print(exportImg);
+
+//but how do we get features from the exportImg?
+var imgFilter = ee.Filter.eq("feature", 1);
+
+var test = colList.slice();
+print("test = ", test);
+var test2 = test.get(0);
+print(test2);
+
+//var test = exportImg.filter(imgFilter);
