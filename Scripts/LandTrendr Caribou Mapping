@@ -170,11 +170,28 @@ var magVizParms = {
 //var debug = aoiSmall.map(LandTrendR);  
 //print(debug);
 
+///this is start of cut
+//for demos - note the typo in WITTmer
+
+
+var n = aoi.size();
+
+var theData = aoi.toList(ee.Number(n));
+
+//this is how to get the polygon ID
+var PolygonID = aoi.aggregate_array("PolygonID");
+//need a list of 1 to whatever
+
+var i = 0;
+  //casting causes the image to lose it's properties. 
+var polyID = PolygonID.get(i);
+
+
+var aoiSmall = theData.slice(i);
+
 var exportImg = aoiSmall
   .map(LandTrendR);
 
-var exportlList = exportImg.toList(n);
-  
 //var polyID = ee.String(PolygonID.get(0));
 //var eePolyID = ee.String("PolygonID == ");
 //eePolyID = eePolyID.cat('"').cat(polyID).cat('"');
@@ -183,20 +200,9 @@ var exportlList = exportImg.toList(n);
 var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
 
 
-
-//Map.addLayer(testAOI);
-
-for (var i = 0; i < n; i++) {
-  //casting causes the image to lose it's properties. 
-  var polyID = PolygonID.get(i);
   
-  var eePolyID = ee.String("PolygonID == ");
-  eePolyID = eePolyID.cat('"').cat(polyID).cat('"');
-  var aoiPoly = aoiSmall.filter(eePolyID);
-  var img = colList.get(i);
-  
-  Export.image.toDrive({
-  image: img,  
+Export.image.toDrive({
+  image: exportImg,  
   description: 'lt-gee_disturbance_map', 
   folder: gdriveFolder, 
   fileNamePrefix: polyID, 
@@ -204,6 +210,6 @@ for (var i = 0; i < n; i++) {
   scale: 30, 
   crs: 'EPSG:5070', 
   maxPixels: 1e13
-  });
-}
+});
+
 
