@@ -59,3 +59,8 @@ var test2 = test.get(0);
 print(test2);
 
 //var test = exportImg.filter(imgFilter);
+
+var eePolyID = ee.String("PolygonID == ");
+eePolyID = eePolyID.cat('"').cat(polyID).cat('"');
+var aoiPoly = aoiSmall.filter(eePolyID);
+var img = colList.get(i);
