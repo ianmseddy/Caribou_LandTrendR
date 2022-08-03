@@ -23,46 +23,13 @@ var aoi = ee.FeatureCollection("projects/caribou-landtrendr-354619/assets/Digiti
 //     https://emaprlab.users.earthengine.app/view/lt-gee-change-mapper
 
 
-//Ian added
-//isolate each individual range from Caribou range poly
-
-//for demos - note the typo in WITTmer
-var PolyFilt = ee.Filter.inList("PolygonID", ["WIttmer15_ColumbiaSouth", "Wittmer15_ColumbiaNorth"]);
-var aoiSmall = aoi.filter(PolyFilt);
-
-var n = aoiSmall.size();
-print(n);
-
-var theData = aoiSmall.toList(ee.Number(n));
-
-
-
-//this prints table metadata but has not proven useful
-function getCols(tableMetadata) {
-  print(tableMetadata.columns);
-}
-
-//this is how to get the polygon ID
-var PolygonID = aoiSmall.aggregate_array("PolygonID");
-//need a list of 1 to whatever
-aoiSmall = aoiSmall.set("PolygonID", PolygonID);
-
-
-//var test = aoiSmall.set(PolygonIDdic);
-//print(test)
-// Fetch collection metadata (`.limit(0)`) and apply the
-// previously defined function using `evaluate()`. The printed object is a
-// dictionary where keys are column names and values are datatypes.
-
-
-// /*
 
 //##########################################################################################
 // START INPUTS
 //##########################################################################################
 
 var LandTrendR = function(AOI){
-  var aoi = ee.FeatureCollection(AOI);
+  //var aoi = ee.FeatureCollection(AOI);
   var polyID = aoi.get("PolygonID");
   //if this fails try aoi.toDictionary().values())
   
@@ -100,9 +67,7 @@ var LandTrendR = function(AOI){
     
   };
 
-//##########################################################################################
-// END INPUTS
-//##########################################################################################
+
 
 // load the LandTrendr.js module
 // var ltgee = require('users/emaprlab/public:Modules/LandTrendr.js'); 
@@ -172,41 +137,42 @@ var magVizParms = {
 
 ///this is start of cut
 //for demos - note the typo in WITTmer
-
-
+var i = 0;
 var n = aoi.size();
-
-var theData = aoi.toList(ee.Number(n));
-
 //this is how to get the polygon ID
-var PolygonID = aoi.aggregate_array("PolygonID");
+var PolygonIDs = aoi.aggregate_array("PolygonID");
 //need a list of 1 to whatever
 
-var i = 0;
   //casting causes the image to lose it's properties. 
-var polyID = PolygonID.get(i);
+var polyID = PolygonIDs.get(i);
+
+print(polyID);
+var polyIDstring = ee.String(polyID);
+
+var eePolyID = ee.String("PolygonID == ");
+eePolyID = eePolyID.cat('"').cat(polyIDstring).cat('"');
+
+//var aoiFilter = ee.Filter.eq(eePolyID);
+var aoiClip = aoi.filter(eePolyID);
+var theFilename = polyID.getInfo();
+print(theFilename);
+var gdriveFolder = 'Caribou_LandTrendR_Results';
+
+var exportImg = LandTrendR(aoiClip);
+
+Map.addLayer(aoiClip);
+
+//for demos - note the typo in WITTmer
+//var PolyFilt = ee.Filter.inList("PolygonID", ["WIttmer15_ColumbiaSouth", "Wittmer15_ColumbiaNorth"]);
+//var aoiSmall = aoi.filter(PolyFilt);
 
 
-var aoiSmall = theData.slice(i);
-
-var exportImg = aoiSmall
-  .map(LandTrendR);
-
-//var polyID = ee.String(PolygonID.get(0));
-//var eePolyID = ee.String("PolygonID == ");
-//eePolyID = eePolyID.cat('"').cat(polyID).cat('"');
-//var testFilter = ee.Filter.eq(eePolyID);
-
-var gdriveFolder = 'users/ieddy/Caribou_LandTrendr/CaribouResults';
-
-
-  
 Export.image.toDrive({
   image: exportImg,  
   description: 'lt-gee_disturbance_map', 
   folder: gdriveFolder, 
-  fileNamePrefix: polyID, 
-  region: aoiPoly, 
+  fileNamePrefix: theFilename, 
+  region: aoiClip, 
   scale: 30, 
   crs: 'EPSG:5070', 
   maxPixels: 1e13
