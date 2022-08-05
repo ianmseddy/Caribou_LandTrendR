@@ -135,10 +135,9 @@ var magVizParms = {
 //var debug = aoiSmall.map(LandTrendR);  
 //print(debug);
 
-///this is start of cut
-//for demos - note the typo in WITTmer
-var i = 6;
-//5 was Mahoney80
+
+var i = 19;
+//16 was Rettie92_Reyakwin
 var n = aoi.size();
 //this is how to get the polygon ID
 var PolygonIDs = aoi.aggregate_array("PolygonID");
@@ -175,7 +174,8 @@ Export.image.toDrive({
   fileNamePrefix: theFilename, 
   region: aoiClip, 
   scale: 30, 
-  crs: 'EPSG:5070', 
+  //crs: 'EPSG:5070',
+  crs: 9001, //to match C2C
   maxPixels: 1e13
 });
 
