@@ -137,12 +137,18 @@ var magVizParms = {
 
 
 var i = 22;
+// investigate why 20, 21, 19 were all James Athabasca
 //16 was Rettie92_Reyakwin
+//this includes individual polygons -must convert those to multipolygon in advance
+
 var n = aoi.size();
-//this is how to get the polygon ID
+
 var PolygonIDs = aoi.aggregate_array("PolygonID");
 //need a list of 1 to whatever
+print(PolygonIDs.size());
 
+var test = aoi.columns.PolygonID;
+print(test);
   //casting causes the image to lose it's properties. 
 var polyID = PolygonIDs.get(i);
 
@@ -174,8 +180,7 @@ Export.image.toDrive({
   fileNamePrefix: theFilename, 
   region: aoiClip, 
   scale: 30, 
-  //crs: 'EPSG:5070',
-  crs: 9001, //to match C2C
+  crs: 'EPSG:5070',
   maxPixels: 1e13
 });
 
