@@ -136,7 +136,7 @@ var magVizParms = {
 //print(debug);
 
 
-var i = 19;
+var i = 22;
 //16 was Rettie92_Reyakwin
 var n = aoi.size();
 //this is how to get the polygon ID
