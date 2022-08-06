@@ -136,19 +136,19 @@ var magVizParms = {
 //print(debug);
 
 
-var i = 22;
-// investigate why 20, 21, 19 were all James Athabasca
+var i = 28;
+
 //16 was Rettie92_Reyakwin
 //this includes individual polygons -must convert those to multipolygon in advance
-
+// so skip 25:27, 29, 31, 35, 37, 39:41, 44, 51:53, and 85:90 
 var n = aoi.size();
 
 var PolygonIDs = aoi.aggregate_array("PolygonID");
-//need a list of 1 to whatever
-print(PolygonIDs.size());
+var test = aoi.get("PolygonID");
 
-var test = aoi.columns.PolygonID;
-print(test);
+//need a list of 1 to whatever
+
+print(PolygonIDs);
   //casting causes the image to lose it's properties. 
 var polyID = PolygonIDs.get(i);
 
