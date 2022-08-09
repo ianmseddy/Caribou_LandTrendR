@@ -136,7 +136,7 @@ var magVizParms = {
 //print(debug);
 
 
-var i = 28;
+var i = 42;
 
 //16 was Rettie92_Reyakwin
 //this includes individual polygons -must convert those to multipolygon in advance
