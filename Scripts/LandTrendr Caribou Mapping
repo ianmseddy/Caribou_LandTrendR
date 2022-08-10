@@ -136,9 +136,9 @@ var magVizParms = {
 //print(debug);
 
 
-var i = 43;
+var i = 47
 
-//16 was Rettie92_Reyakwin
+//45 was Courtois91_Manou
 //this includes individual polygons -must convert those to multipolygon in advance
 // so skip 25:27, 29, 31, 35, 37, 39:41, 44, 51:53, and 85:90 
 var n = aoi.size();
