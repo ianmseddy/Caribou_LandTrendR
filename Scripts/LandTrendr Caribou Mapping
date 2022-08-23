@@ -136,7 +136,7 @@ var magVizParms = {
 //print(debug);
 
 
-var i = 80;
+var i = 97;
 
 //80 was johnson narrawy
 //this includes individual polygons -must convert those to multipolygon in advance
@@ -146,7 +146,6 @@ var n = aoi.size();
 var PolygonIDs = aoi.aggregate_array("PolygonID");
 var test = aoi.get("PolygonID");
 
-//need a list of 1 to whatever
 
 print(PolygonIDs);
   //casting causes the image to lose it's properties. 
