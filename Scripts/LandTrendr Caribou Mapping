@@ -116,6 +116,7 @@ var LandTrendR = function(AOI){
 
 //puyrely for plotting - remove once working
 /// moving the plotting outside for now 
+/*
 var palette = ['#9400D3', '#4B0082', '#0000FF', '#00FF00', '#FFFF00', '#FF7F00', '#FF0000'];
 var startYear = 1984;
 var endYear = 2020;
@@ -132,11 +133,12 @@ var magVizParms = {
   palette: palette
   };
 
+*/
 //var debug = aoiSmall.map(LandTrendR);  
 //print(debug);
 
 
-var i = 97;
+var i = 104;
 
 //80 was johnson narrawy
 //this includes individual polygons -must convert those to multipolygon in advance
